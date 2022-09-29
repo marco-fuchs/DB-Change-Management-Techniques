@@ -1,0 +1,39 @@
+
+name: CI - Build LaTeX document
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    container:
+      image: leplusorg/latex
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build LaTeX
+        run: | 
+          pdflatex -synctex=1 -interaction=nonstopmode --shell-escape "doku".tex
+          biber "doku"
+          pdflatex -synctex=1 -interaction=nonstopmode --shell-escape "doku".tex
+          pdflatex -synctex=1 -interaction=nonstopmode --shell-escape "doku".tex
+          
+      - name: Upload PDF
+        uses: actions/upload-artifact@v3
+        with:
+          name: doku.pdf
+          path: ./doku.pdf
+      - uses: eine/tip@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: 'nightly'
+          files: |
+            ./doku.pdf
+    
