@@ -1,5 +1,5 @@
 
-% !TeX spellcheck = de_DE
+% !TeX spellcheck = en_US
 
 \chapter{Introduction}
 
@@ -7,19 +7,37 @@ The following sections provide a brief introduction to database change
 management. This includes short summary of its history and focuses on
 the benefits database change management provides.
 
-\section{History}%
-The purpose of this section is to provide a timeline of commonly used
-tactics for database change management.
+\section{Problem Statement and Benefits}%
+The purpose of this section is to show the problems in database migrations.
+ v
+\cite{Dillon2022} presents the following benefits:
 
-\section{Benefits of Database Change Management}%
+\begin{enumerate}
+    \item They automatically order scripts for deployment
+    \item They do branching and merging for teams 
+    \item They embed easily into products or build tools (think Jenkins)
+    \item They make it easy to roll back changes
+    \item They let you reproduce schema changes across multiple environments
+    \item They provide automation so you can do schema changes automatically without having to remember all the commands
+\end{enumerate}
+
+Furthermore these migration files can be used as single source of truth for the actual production schemas.
+This becomes very handy, as soon as you have to manage and update multiple database environments.
+
+\section{State of the Art}%
 This section aims to answer the question of why database change
 management is useful.
 Furthermore, advantages and disadvantages will be described.
 
-\section{Overview of Available Tools}%
+
+
+\section{Available Tools}%
 This section will provide an overview of available change management tools.
 The list of tools should include the available programming languages, price / availability
 and the main advantage over their competitors.
 
+
+\section{Overview}%
+This section gives a overview of the thesis.
 
 \newpage
