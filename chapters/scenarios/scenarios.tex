@@ -12,70 +12,127 @@ This section shows how to handle the predefined scenarios for the given change m
 	\item Rename a table and change a related view which uses this table.
 \end{itemize}
 
+The changes were applied to an existing database Pagila \cite{Hillyer}. Each first two migrations are to setup the database, first the create the schema and second to insert the specific data.
 
 \section{Flyway Scenarios}
 
-\subsection{Usage \& minimal Example}
+\subsection{Using CLI}
+\marginpar{Setup \cite{FlywayGetStarted}}%
+To create a first migration, add a database change as sql file into the sql directory (see \autoref{fig:flyway_folder_structure}). 
+The scripts \texttt{V1\_\_create\_db.sql} and \texttt{V2\_\_insert\_pagila\_data.sql} set up the pagila database as illustrated in \autoref{fig:flyway_empty_db}. When running  \texttt{flyway migrate}, flyway wants to adapt the schema history table. But as this table does not exist, it will create a new one instead.
 
-\marginpar{CLI and commands}%
-\textbf{Migrate}\\
-To create a first migration, add a database change as sql file into the sql directory (see \autoref{fig:flyway_sql_scripts}).
-In our minimal example, the file \texttt{V1\_\_create\_db.sql} looks like the following:
 
-\begin{lstlisting}[language=SQL, caption=Create a database]
-	CREATE TABLE weather (
-	city            varchar(80),
-	temp_lo         int,           -- low temperature
-	temp_hi         int,           -- high temperature
-	prcp            real,          -- precipitation
-	date            date
-	);
-\end{lstlisting}
-
-To apply the first migration, run: \texttt{flyway migrate}.
-If the migration is successful, you will see the output below:
-\begin{lstlisting}[caption=Flyway first migration success]
-	(base) marco@MacBook-Pro-von-Marco flyway-9.6.0 % flyway migrate
-	Flyway is up to date
-	Flyway Community Edition 9.6.0 by Redgate
-	See what's new here: https://flywaydb.org/documentation/learnmore/releaseNotes#9.6.0
-	
-	Database: jdbc:postgresql://localhost:5433/seminar (PostgreSQL 14.5)
-	Successfully validated 1 migration (execution time 00:00.021s)
-	Creating Schema History table "public"."flyway_schema_history" ...
-	Current version of schema "public": << Empty Schema >>
-	Migrating schema "public" to version "1 - create db"
-	Successfully applied 1 migration to schema "public", now at version v1 (execution time 00:00.030s)
-\end{lstlisting}
-
-Now the table \textit{weather} has been created by flyway. There was also an additional metadata table (\textit{flyway\_schema\_history}) created with the first migration. This metadata table holds various information regarding the migration and their past.
-
-If one want to update the database for example with data, just create a new script with the name e.g. \texttt{V2\_\_add\_data.sql} and run  \texttt{flyway migrate} again.
-
-\begin{lstlisting}[language=SQL, caption=Create a database]
-	INSERT INTO weather VALUES ('Zurich', 10, 17, 0.25, '2022-10-30');
-	INSERT INTO weather VALUES ('Rapperswil', 8, 15, 0.25, '2022-10-30');
-\end{lstlisting}
+ 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.4\textwidth]{./chapters/intro_flyway/images/flyway_v2_sql_migrations}
-	\caption[Flyway SQL migrations - Source: Own illustration]{Flyway SQL migrations}
-	\label{fig:flyway_sql_scripts}
+	\includegraphics[width=0.45\textwidth]{./chapters/scenarios/images/EmptyDb}
+	\caption[Flyway empty database - Source: \cite{FlywayGetStarted}]{Flyway empty database}
+	 \label{fig:flyway_empty_db}
+\end{figure}
+Now the table \textit{flyway\_schema\_history} has been created via the first flyway migration. This metadata table holds various information regarding the database migrations and their history. After this initialization, flyway runs the migration scripts in the sql directory according on their version number subsequently. 
+BASELINE MODEL! To start with a baseline
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\textwidth]{./chapters/scenarios/images/Migration-1-2}
+	\caption[Flyway first migrations - Source: \cite{FlywayGetStarted}]{Flyway first migrations}
+	\label{fig:Migration-1-2}
 \end{figure}
 
 
+\marginpar{Rename an attribute}%
+The first change specific migration is in the sql migration script\\ \texttt{V3\_\_rename\_attribute.sql}:
+\begin{lstlisting}[language=SQL]
+ALTER TABLE customer RENAME COLUMN email TO private_email;
+\end{lstlisting}
+After just adding the script to de sql directory, flyway already knows the change and stores it into the meta data table. With \texttt{flyway info} the migration status can be asked:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.95\textwidth]{./chapters/scenarios/images/flyway_metadata_v2}
+	\caption[Flyway meta data table - Source: Own illustration]{Flyway meta data table}
+	% \label{fig:bsp_chapter:example_figure}
+\end{figure}
+In order to perform the migration effectively, the command \texttt{flyway migrate} is applied.
 
 
 
-\subsection{Usage with Java API, Maven or Gradle}
+\marginpar{Add an\\ attribute}%
+To apply the second migration the following script is applied in V3.
+\begin{lstlisting}[language=SQL]
+ALTER TABLE customer ADD COLUMN gender VARCHAR(50);
+
+UPDATE customer
+SET gender = 'undefined';
+\end{lstlisting}
+Flyway generates a checksum for every applied migration. This checksum is used to track if a file was changes after its applied migration. If such a change occurs, a new migration will cause an error and asks to either revert the change or to run \texttt{flyway repair} to update the schema history.
+If a developer would change the default value of gender from \textit{undefined} to \textit{undef} and run a new migration, it would fail. To fix this run \texttt{flyway repair}. Even the environment is now fixed, the change gender equals \textit{undef} is not applied and still \textit{undefined}.
+
+
+\marginpar{Delete an\\ attribute}%
+
+\begin{lstlisting}[language=SQL]
+ALTER TABLE customer
+DROP COLUMN gender;
+\end{lstlisting}
+\todo{chan delete be undoable? Without extra effort.
+	How can I undo the deletion? Requires flyway teams.
+}
+
+\marginpar{Change an attribute typ}%
+To change an attribute type the migration in the file \texttt{V6\_\_change\_attribute\_type.sql} was applied with flyway migrate:
+\begin{lstlisting}[language=SQL]
+ALTER TABLE customer
+ALTER COLUMN private_email TYPE VARCHAR(100) USING private_email::varchar;
+\end{lstlisting}
+
+
+\marginpar{Rename a table and change related view}%
+The last migration is to change a related view after renaming a table\\
+\texttt{V7\_\_change\_attribute\_type.sql} was applied with flyway migrate:
+\begin{lstlisting}[language=SQL]
+ALTER TABLE customer RENAME TO clients;
+	
+	
+CREATE OR REPLACE VIEW customer_list AS
+SELECT cl.customer_id AS id,
+	(cl.first_name || ' '::text) || cl.last_name AS name,
+	a.address,
+	a.postal_code AS "zip code",
+	a.phone,
+	city.city,
+	country.country,
+	CASE
+		WHEN cl.activebool THEN 'active'::text
+		ELSE ''::text
+	END AS notes,
+	cl.store_id AS sid
+FROM clients cl
+JOIN address a ON cl.address_id = a.address_id
+JOIN city ON a.city_id = city.city_id
+JOIN country ON city.country_id = country.country_id;
+\end{lstlisting}
+
+After this last migration the flyway schema history looks like the following:
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.1\textwidth]{./chapters/scenarios/images/flyway_schema_history}
+	\caption[Flyway Schema History - Source: Own illustration]{Flyway Schema History}
+	% \label{fig:bsp_chapter:example_figure}
+\end{figure}
+For every migration the date inclusive time, the script or the user that applied the script is stored.
+
+\marginpar{Failed migration}%
+If a migration fails, an automated rollback is applied.
+
+\subsection{Usage with Java API}
 \marginpar{JavaAPI}%
-LOBs,
-
-\marginpar{Maven or Gradle}%
-Integration with maven or gradle.
+TODO\\
 
 
+
+\newpage
 \section{Liquibase Scenarios}
 
 

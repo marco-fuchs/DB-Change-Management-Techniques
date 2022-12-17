@@ -18,11 +18,14 @@ It's also important to make sure everyone can see the progress of the changes, s
 
 \section{Problem Statement and Benefits}%
  
- \marginpar{Motivation\\ \cite{techopedia2022}, \cite{Choudhry2018}}%
+ \marginpar{Motivation\\ \cite{techopedia2022}, \cite{Choudhry2018}, \cite{Parsick2018}}%
  In the last 20 years, agile approaches have spread in their popularity. One principle of agile methods is, how to deal with change. This has changed massively compared to previous not agile methods. If you are operating agile, you want to allow changes, even late in the project. But in contrast, the database community has traditionally considered database design to be something that needs to be planned in advance.\\
- In this complex and agile company environment, it is very hard to keep track of the database changes. Handling relational database changes requires special consideration and offer different challenges than deploying classical software. Database systems suffer from problems such as untracked changes, overwritten code, data-loss or data mix-up. Such shortcomings applied to the production database can be a major risk.  Manual modification of database structures can be very time-consuming and error-prone.
+ 
+ In this complex and agile company environment, it is very hard to keep track of the database changes. Handling relational database changes requires special consideration and offer different challenges than deploying classical software. Database systems suffer from problems such as untracked changes, overwritten code, data-loss or data mix-up. Such shortcomings applied to the production database can be a major risk. Manual modification of database structures can be very time-consuming and error-prone. Nobody knows which database scripts have been migrated on which database instances. 
+ Without a clearly defined process, database migration scripts are recorded for example on release notes or ticket systems..
+In addition, no one may know how the test database differs from the production database.\\
+ 
  For that reason, these migrations are best done automatically so it does not come to downtime or errors. A proper database change management ensures that changes to a database are controlled and safe. According to \cite{ManageForce2016}, 80\% of unplanned database downtime id due database changes.
-
 Developers need a good strategy, how to apply changes to the same database environment.
 This requires a best practices strategy on how to deal with different users, branches and applications. Using a proper management system can prevent a developer of running into a very annoying \textit{Column not found} error.\\
 
@@ -54,26 +57,27 @@ This seminar thesis focuses on database migrations in the context of schema migr
 In most organizations, the way in which database changes are handled is different. There are the following common scenarios:
 
 \begin{enumerate}
-	\item Database changes are not included in the deployment pipeline
-	\item Database and application changes have a different deployment process 
-	\item Database and application share a deployment process
+	\item \textit{Database changes are not included in the deployment pipeline}\\
+	If changes in the database are not included in the pipeline, most migrations are performed manually which is resulting in risks and ultimately into costs. Not including the database changes at all lead to lacks in traceability and promotes the fear of every change.
+	
+	\item \textit{Database and application changes have a different deployment process}\\
+	Software developers use continuous delivery to manage their deployment of the software. In a nowadays modern agile environment, the demand for techniques that support this agile processes are desired. A lot of teams use similar techniques when it comes to database change management and add their database changes as scripts in version control tools in a separate pipeline. Most developers know very well how to use the tools from software development and can apply these version control techniques for their database environment. If a database has an encapsulate pipeline to the application, this means that the application development team and the database administrator have to keep synchronized. As a result, agile delivery processes become slowed down by database deployment and synchronization with the application.
+	
+	Team members, including DBAs, need to be able to see how changes are progressing so they can know what changes are planned, how their testing is going, and which schema changes have been implemented in production databases.
+	
+	\item \textit{Database and application share a deployment process}
+	According to  \cite{GoogleDevOps2022}, this is the best pratice method which can be achieved by this:
+	\begin{itemize}
+		\item Keeping all database schema changes in version control, together with the application code the schema belongs to
+		\item Using a tool that records which changes have been run against which environments, and what the results were.
+	\end{itemize}
+	These practices also ensure that there is a canonical source of truth for all changes and make the change history easily accessible for auditing purposes.
+
 \end{enumerate}
 
 
-If changes in the database are not included in the pipeline, most migrations are performed manually which is resulting in risks and ultimately into costs. Not including the database changes at all lead to lacks in traceability and promotes the fear from every change.
 
-Software developers use continuous delivery to manage their deployment of the software. In a nowadays modern agile environment, the demand for techniques that support this agile processes are desired. A lot of teams use similar techniques when it comes to database change management and add their database changes as scripts in version control tools in a separate pipeline. Most developers know very well how to use the tools from software development and can apply these version control techniques for their database environment.
-
-If a database has an encapsulate pipeline to the application, this means that the application development team and the database administrator have to keep synchronized. As a result, agile delivery processes become slowed down by database deployment and synchronization with the application.
-
-Team members, including DBAs, need to be able to see how changes are progressing so they can know what changes are planned, how their testing is going, and which schema changes have been implemented in production databases. \cite{GoogleDevOps2022} presents two practices achieve this:
-\begin{itemize}
-	\item Keeping all database schema changes in version control, together with the application code the schema belongs to
-	\item Using a tool that records which changes have been run against which environments, and what the results were.
-\end{itemize}
-These practices also ensure that there is a canonical source of truth for all changes and make the change history easily accessible for auditing purposes.
-
-\subsection{Deployment methods}
+\subsection{Deployment workflows}
 "All databases changes are migrations" \cite{Robles2021}\\
 See \cite{Piairo2018}, \cite{Sadalage2016}
 
@@ -86,13 +90,13 @@ See \cite{Piairo2018}, \cite{Sadalage2016}
 
 
 \subsection{Best Practices for database migrations}%
-\marginpar{Best practices methods \cite{F5works2017}, \cite{Langan2022}}%
+\marginpar{Best practices methods \cite{F5works2017}, \cite{Langan2022}, \cite{Parsick2018}}%
 
 Regardless of what strategy or tools a developer needs, there are certain best practices that simplify dealing with database changes.
 
 \begin{itemize}
 	\item Use a version control system\\
-	Whether you use a migration tool or not it make sense to version control the change files with a version control system like Git
+	Whether you use a migration tool or not it make sense to version control all artefacts like DDL, DML, test data, configurations, functions etc with a version control system like Git
 	\item Atomic changes: For example, when there is code change that requires changing 2 database tables plus patching existing data, there should be at least 3 scripts
 	\item Naming convention: \\
 	A team or company should agree on a naming convention for the migration files. It is recommended to use an ascending naming convention, for example with increasing file names.
@@ -109,20 +113,22 @@ Regardless of what strategy or tools a developer needs, there are certain best p
 		20170517083601_patch_products_default_discounted_amount.sql
 	\end{lstlisting}
 	\item Make sure to track all database changes\\
-	Everyone should be able to see the latest changes
+	Everyone should be able to see the latest change and history
 	\item Store current schema version number in database\\
 	To check weather the most recent version is deployed
 	\item Automate the deployment process\\
 	Manual changes can easily lead to mistakes and need manual rollbacks. Therefore use an automation and migration tool that can avoid costly mistakes and have the ability to roll back.
 	\item Test changes\\
-	To ensure a change does not negetively effect an environment, it is important to test the changes.
+	Every migration or changes has to be tested
 	\item Document changes 
 \end{itemize}
 
 \section{Available Tools}%
-This section will provide an overview of available change management tools.
-The list of tools should include the available programming languages, price / availability
-and the main advantage over their competitors.
+%This section will provide an overview of available change management tools.
+%The list of tools should include the available programming languages, price / availability
+%and the main advantage over their competitors.
+There exists tons 
+
 
 migrate (Go)\\
 alembic (Python)\\

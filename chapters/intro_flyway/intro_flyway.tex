@@ -4,8 +4,6 @@
 \chapter{Introduction to Flyway}
 
 
-\cite{Choudhry2018}
-
 \section{Overview}
 \marginpar{Information}%
 Flyway is a tool that makes database migrations easy and provides version control for your database. It is a multi-platform and cross-database tool with support for over 20 databases.
@@ -14,10 +12,56 @@ Flyway uses the freemium business model.  The basic version is free and open sou
 With flyway you can either write migration files with SQL (database-specific syntax (such as PL/SQL, T-SQL, etc.) or Java (for advanced data transformations or dealing with LOBs). Flyway is able to connect to databases hosted in either on-premises or cloud environments, thanks to the included JDBC driver library that is shipped with the tool. It runs on all modern platforms such as Linux, Mac or Windows.  \cite{Dillon2022}, \cite{DBMSTools}
 
 
+\marginpar{Migrations \cite{Parsick2018}}%
+There are four possibilities of migrations as shown in \autoref{tab:migration_types}. There are versioned migrations with scripts that have a unique meaning, which are executed only once. These versioned migrations are mainly used for Data Definition Language (DDL) like a create or modify a table. \\
 
+Repeatable migration scripts do not have a version number. These are always if their checksum changes and always after the versioned migrations are applied. Typical applications are import base data or (re)-create views or functions.
+
+\begin{table}[h]
+	\centering
+	\begin{tabularx}{8cm}{X|c c}
+		& Versioned & Repeatable \\ \hline
+		SQL based & \checkmark & \checkmark \\
+		Java based & \checkmark & \checkmark \\
+	\end{tabularx}
+	\caption{Migration Types - Based on \cite{Parsick2018}}
+	\label{tab:migration_types}
+\end{table}
+
+%\begin{center}
+%\begin{tabularx}{8cm}{X|c c}
+%	& Versioned & Repeatable \\ \hline
+%SQL based & \checkmark & \checkmark \\
+%Java based & \checkmark & \checkmark \\
+%\end{tabularx}
+%\end{center}
+
+
+\marginpar{SQL migrations}%
+Flyway developers can migrate changes directly with SQL. Per default, flyway takes the database migrations from the directory \textit{sql}.
+These SQL migration files have to follow the naming convention:\\
+
+\begin{center}
+\begin{tabularx}{8cm}{r l}
+Versioned & \texttt{\textcolor{blue}{V}\textcolor{green}{1\_1\_1}\textcolor{red}{\_\_}\textcolor{orange}{create\_table}.sql}\\
+Repeatable & \texttt{\textcolor{blue}{R}\textcolor{red}{\_\_}\textcolor{orange}{create\_table}.sql}\\
+\end{tabularx}
+\end{center}
+
+\begin{flushright}
+\textcolor{blue}{Prefix}\\
+\textcolor{green}{Version}\\
+\textcolor{red}{Seperator (two underscores)}\\
+\textcolor{orange}{Description}\\
+\end{flushright}
+
+These SQL scripts can have several rows and allowed is all database specific syntax including comments.
+
+\marginpar{Java migrations}%
 
 \marginpar{Features}%
-https://flywaydb.org/documentation/command/validate\\
+\todo{Soll das Folgende in den Anhang?}
+
 In the following paragraph, a few very useful flyway commands are presented:\\
 
 \textbf{Info}\\
@@ -77,14 +121,14 @@ If you have never worked with Flyway before there are the following ways to educ
 \end{itemize}
 
 \section{Installation and Setup}
-Download the latest version of the \href{https://flywaydb.org/download/community}{Flyway Cummunity Edition} and extract the downloaded file. 
+Download the latest version of the \href{https://flywaydb.org/download/community}{Flyway Cummunity Edition} and extract the downloaded file. To execute the flyway commands, one need a java installation.
 Once extracted, the file becomes a directory with the following structure:
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.4\textwidth]{./chapters/intro_flyway/images/flyway_folder_structure}
    \caption[Flyway folder structure - Source: Own illustration]{Flyway folder structure}
-    % \label{fig:bsp_chapter:example_figure}
+    \label{fig:flyway_folder_structure}
 \end{figure}
 
 
@@ -93,26 +137,19 @@ To connect to a running database, add the relevant information to \textit{conf/f
 In our minimal example this could be:
 
 \begin{lstlisting}[caption=Minimal configuration]
-flyway.url=jdbc:postgresql://localhost:5433/seminar
+flyway.url=jdbc:postgresql://localhost:5432/pagila
 flyway.user=postgres
 flyway.password=password
 \end{lstlisting}
 
 This is just a minimal configuration, but there are many more additional parameters that can be set \footnote{\url{https://flywaydb.org/documentation/configuration/parameters/}}.
 
-\marginpar{SQL migrations}%
-Flyway developers can migrate changes directly with SQL. Per default, flyway takes the database migrations from the directory \textit{sql}.
-These SQL migration files have to follow the naming convention: \texttt{V<version number>\_\_<description>.sql}.
-
-\begin{itemize}
-    \item "V": This letter indicates it is a versioned migration. Flyway provides different types of migrations
-    \item <version number>: Increasing version number of migrations
-    \item \_\_: Then two underscores
-    \item <description>: Short description of the migration
-    \item Add a .sql extension
-\end{itemize}
 
 \marginpar{Workaround Mac OS}%
-TODO
+To make the flayway command know on MacOS:
+\begin{lstlisting}[caption=Minimal configuration]
+export PATH=$PATH:/Users/marco/Documents/DB-Seminar/flyway-9.8.1
+\end{lstlisting}
+Running a flyway command for the first time, the error message \textit{„java“ kann nicht geöffnet werden, da der Entwickler nicht verifiziert werden kann.} occurs. Go to Security in settings and allow the java instance to run.
 
 \newpage
