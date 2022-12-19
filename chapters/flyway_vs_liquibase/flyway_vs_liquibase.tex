@@ -10,12 +10,17 @@ Advantages, Disadvantages, Restrictions are analyzed and a recommendation for th
 
 \begin{itemize}
 	\item Simple installation and easy to use
+	\item Open Source and good community
+	\item Lightweight
 \end{itemize}
 
 \marginpar{Disadvantages Flyway}%
 \begin{itemize}
-	\item Important features like undo are only available in the paid Flyway Teams Edition.
+	\item Important features like undo are only available in the paid Flyway Teams Edition. The flyway developers had the mindset, that if anything goes wrong at all, an undo script need not help at all or could only make the situation worse.
+	\item Individual scripts for separate databases. The fact that you only have to write a script once and can use it with different databases without any problems is very low and especially not guaranteed by flyway. If you would change the database every few years, or have several different database instances running, Flyway is not the best choice.
+	\item No support for older Java versions such as Java 6 \& 7. Not even the Pro-Version supports this, one has to go with the enterprise edition if you wan support for these older Java versions.
 \end{itemize}
 
+Liquibase can apply the same scripts to different database vendors.
 
 \newpage
