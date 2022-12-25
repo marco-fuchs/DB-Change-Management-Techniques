@@ -16,6 +16,15 @@ In addition, no one may know how the test database differs from the production d
 Developers need a good strategy, how to apply changes to the same database environment.
 This requires a best practices strategy on how to deal with different users, branches and applications. Using a proper management system can prevent a developer of running into a very annoying \textit{Column not found} error.\\
 
+\marginpar{SQL DDL/DML\ \cite{Fritchey2011}}%
+But why not just use SQL DDL/DML as source for the change management?
+SQL DDL and DML statements are used to create, modify, and query the structure and data of a database, respectively. While these statements can be used to make changes to a database, they are not well-suited for change management in the broader sense.
+
+Change management refers to the process of tracking, reviewing, approving, and implementing changes to a system or process. In the context of a database, this would involve not only making changes to the structure and data of the database using SQL statements, but also documenting and communicating those changes to stakeholders, testing the changes to ensure that they have the desired effect and do not break any existing functionality, and rolling back changes if necessary.
+
+Database change management systems are designed to support this process by providing a framework for managing and automating the entire change management process. These systems typically include features such as version control, change tracking, approval workflows, and rollback capabilities, which make it easier to manage and coordinate changes to a database.
+
+Using a database change management system can help ensure that changes to a database are made in a controlled and consistent manner, reducing the risk of errors and downtime. It can also improve collaboration and communication among team members, and make it easier to audit and document changes to the database.
  
 \marginpar{Benefits}%
 With the problems and shortcomings mentioned above, it is very useful to implement certain automatism or use so-called change management tools in the deployment pipeline.
@@ -38,6 +47,7 @@ Furthermore, a migration can be used as single source of truth for the actual pr
 \marginpar{Context}%
 This seminar thesis focuses on database migrations in the context of schema migrations.  Other database migrations such as moving a database to a different platform or a cloud are not considered in the context of this work.
 
+\newpage
 \section{State of the Art}%
 \subsection{DevOps strategies}
 \marginpar{Change\\ management strategies\\ \cite{GoogleDevOps2022}, \cite{Piairo2018}}%
@@ -65,77 +75,92 @@ In most organizations, the way in which database changes are handled is differen
 
 
 \subsection{Deployment workflows}
-"All databases changes are migrations" \cite{Robles2021}\\
-See \cite{Piairo2018}, \cite{Sadalage2016}
+\marginpar{Multiple environments \cite{Lukonin2017}}%
+In many cases, three instances of the database are needed in parallel. One database for development is located locally with each developer. The second database is for testing purposes before deploying and the third is the actual production database. Therefore each developer should use his/hers own local database copy and own branch.\\
+The migration tools like flyway or liquibase can be used in all of these three environments. They allow local integration and use as well as integration into the CI pipeline in which the test database is used. Change management tools can also be integrated into the production environment in which for example run in the cloud. 
 
-\marginpar{Source control}%
-"All database artifacts are version controlled with application code"
-
-\marginpar{State based vs migration based}%
-
-\marginpar{Deployment pipelines scenarios}%
+Using multiple environments with Flyway is possible, because Flyway is a thread-safe tool that can be used to manage database migrations in environments with multiple instances of an application running simultaneously. Each instance will run the Flyway "migrate" command and apply the necessary migrations to the database. Flyway locks the SCHEMA\_VERSION table during each migration to prevent conflicts or duplicate migrations. This means that other instances will wait until the current migration is completed before proceeding. Multiple instances of Flyway can grab different migrations and apply them in the order defined by their version numbers. However, if multiple instances of the application are initialized at the same time during the initial deployment, and the SCHEMA\_VERSION table does not yet exist, there is a risk of failure. To prevent this, you can run Flyway manually from the command line when deploying for the first time, create the SCHEMA\_VERSION table in advance, or start the second and subsequent instances of the application with a delay to allow the first instance enough time to create the table.
 
 
-\subsection{Best Practices for database migrations}%
-\marginpar{Best practices methods \cite{F5works2017}, \cite{Langan2022}, \cite{Parsick2018}}%
+
+
+\subsection{Best Practices for database migrations \label{best_practices}}%
+\marginpar{Best practices methods  \cite{Parsick2018}, \cite{F5works2017}, \cite{Langan2022}, \cite{Heppell2021}, \cite{Lukonin2017}}%
 
 Regardless of what strategy or tools a developer needs, there are certain best practices that simplify dealing with database changes.
 
 \begin{itemize}
 	\item Use a version control system\\
-	Whether you use a migration tool or not it make sense to version control all artefacts like DDL, DML, test data, configurations, functions etc with a version control system like Git
-	\item Atomic changes: For example, when there is code change that requires changing 2 database tables plus patching existing data, there should be at least 3 scripts
-	\item Naming convention: \\
+	Whether you use a migration tool or not it make sense to version control all artefacts like DDL, DML, test data, configurations, functions etc with a version control system (VCS).
+	\item Automate the deployment process\\
+	Manual changes can easily lead to mistakes and need manual rollbacks. Therefore use an automation and migration tool that can avoid costly mistakes and have the ability to roll back.
+	\item Atomic changes\\
+	For example, when there is code change that requires changing 2 database tables plus patching existing data, there should be at least 3 scripts.
+	\item Naming convention\\
 	A team or company should agree on a naming convention for the migration files. It is recommended to use an ascending naming convention, for example with increasing file names.
 	\begin{lstlisting}[caption=Increasing file names]
-		001_add_discounted_amount_to_products.sql
-		002_add_total_amount_to_orders.sql
-		003_patch_products_default_discounted_amount.sql
+		V001__first_change.sql
+		V002__second_change.sql
+		V003__third_change.sql
 	\end{lstlisting}
-	
-	It would be even better if the date and time were included. This way the current index does not have to be checked, because the changes to an identical naming are very small.
+	Instead of using integers to identify versions of the delta file, using timestamps can significantly reduce the likelihood of conflicts. With timestamps, migrations can be applied in the order in which they were created, which helps to maintain the integrity of the database. 
+
 	\begin{lstlisting}[caption=Timestamps]
-		20170517080001_add_discounted_amount_to_products.sql
-		20170517081501_add_total_amount_to_orders.sql
-		20170517083601_patch_products_default_discounted_amount.sql
+		V2022-12-25-14-52__first_change.sql
+		V2022-12-26-09-02__second_change.sql
+		V2022-12-28-16-32__third_change.sql
 	\end{lstlisting}
+
+	This improves the handling of branches, because with this naming the scripts are automatically sorted by date. But if a branch containing an older migration script is merged into the main branch before a branch containing a newer script, for example Flyway will ignore the older script by default. Flyway will consider the migration script in purple Branch \#2 to be outdated when it is merged. This is true regardless of whether the version numbers are timestamps or integers. To prevent this issue, you can enable the out-of-order migrations setting in Flyway, which will allow it to apply migration scripts in any order. 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.95\textwidth]{./chapters/introduction/images/Branching-Flyway-Branch.png}
+		\caption[Branching with Flyway - Source: \cite{Lukonin2017}]{Branching with Flyway}
+		\label{fig:flyway_branching}
+	\end{figure}
+
+	
+	
 	\item Make sure to track all database changes\\
 	Everyone should be able to see the latest change and history
 	\item Store current schema version number in database\\
-	To check weather the most recent version is deployed
-	\item Automate the deployment process\\
-	Manual changes can easily lead to mistakes and need manual rollbacks. Therefore use an automation and migration tool that can avoid costly mistakes and have the ability to roll back.
+	To check weather the most recent version is deployed.
 	\item Test changes\\
-	Every migration or changes has to be tested
-	\item Document changes 
+	If two migrations share the same name or you make a change that is influenced by another developer, it can quickly lead to a crash of the migration. So every migration or change on database artifacts has to be tested before and after every merge to the main branch to catch issues straight away.
+	\item Each developer uses his own database and test databases resemble the production database.
 \end{itemize}
 
+
+
 \section{Available Tools}%
-%This section will provide an overview of available change management tools.
+This section will provide an overview of available change management tools.
 %The list of tools should include the available programming languages, price / availability
 %and the main advantage over their competitors.
-There exists tons 
+
+\begin{table}[h]
+	\centering
+	\begin{tabularx}{8cm}{X|c|l}
+		Name & Language & Pricing \\ \hline
+		Flyway & independent\\
+		Liquibase & independent\\
+		migrate & Go  \\
+		Active Record Migrations & Ruby on Rails \\
+		alembic & Python \\
+		dbup & .NET \\
+		Entity Framework Migrations & .NET \\
+		Laravel Migrations & PHP \\
+		\href{https://ollycope.com/software/yoyo/latest/}{Yoyo} &  \\
+		\href{https://book.cakephp.org/phinx/0/en/migrations.html}{Phinx} &  \\
+		\href{https://www.dbmaestro.com/for-devops}{DBmaestro} &  \\
+		\href{https://docs.djangoproject.com/en/1.11/topics/migrations/}{Django} & Python \\
+		\href{http://dbdeploy.com}{DBdeploy} & PHP \\
+	\end{tabularx}
+	\caption{Available migration tools - Based on \cite{}}
+	\label{tab:migration_tools}
+\end{table}
 
 
-migrate (Go)\\
-alembic (Python)\\
-Active Record Migrations (Ruby on Rails)\\
-dbup (.NET)\\
-Entity Framework Migrations (.NET)\\
-Laravel Migrations (PHP)\\
-Flyway (platform-independent)\\
-Liquibase (platform-independent)\\
-DBdeploy \url{http://dbdeploy.com}\\
-Yoyo \url{https://ollycope.com/software/yoyo/latest/}\\
-Phinx \url{https://book.cakephp.org/phinx/0/en/migrations.html}\\
-DBmaestro \url{https://www.dbmaestro.com/for-devops}\\
-Django \url{https://docs.djangoproject.com/en/1.11/topics/migrations/}
-
-
-
-\section{Overview}%
-This section gives a overview of the thesis.
-
+\todo{..}
 
 
 \section{Overview}%

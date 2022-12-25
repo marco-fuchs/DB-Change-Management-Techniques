@@ -12,10 +12,10 @@ Flyway uses the freemium business model.  The basic version is free and open sou
 With flyway you can either write migration files with SQL (database-specific syntax (such as PL/SQL, T-SQL, etc.) or Java (for advanced data transformations or dealing with LOBs). Flyway is able to connect to databases hosted in either on-premises or cloud environments, thanks to the included JDBC driver library that is shipped with the tool. It runs on all modern platforms such as Linux, Mac or Windows.  \cite{Dillon2022}, \cite{DBMSTools}
 
 
-\marginpar{Migrations \cite{Parsick2018}}%
+\marginpar{Migrations \cite{Parsick2018}, \cite{Lukonin2017}}%
 There are four possibilities of migrations as shown in \autoref{tab:migration_types}. There are versioned migrations with scripts that have a unique meaning, which are executed only once. These versioned migrations are mainly used for Data Definition Language (DDL) like a create or modify a table. \\
 
-Repeatable migration scripts do not have a version number. These are always if their checksum changes and always after the versioned migrations are applied. Typical applications are import base data or (re)-create views or functions.
+Repeatable migration scripts do not have a version number. These are always if their checksum changes and always after the versioned migrations are applied. Typical applications for repeatable tasks are import base data, rebuild views or indexes, adding permissions or other maintenance tasks.
 
 \begin{table}[h]
 	\centering
@@ -89,30 +89,59 @@ AfterMigrate.sql
 If the task needs to be more powerful or flexible, Java callbacks can be formulated as following:
 \begin{lstlisting}[caption=Java Callback Functions before clean - Source: \cite{FlywayCallbacks}]
 public interface FlywayCallback {
-
 	/**
 	* Runs before the tasks executes
-	* by avoiding unnecessary connection state setups for events that will not be handled anyway.
-	*
+	* by avoiding unnecessary connection state setups for events 
+	* that will not be handled anyway.
 	* @param valid connection to a database
 	*/
 	void beforeClean(Connection connection);
-	
 }
 \end{lstlisting}
 Other callback function can be formulated with the same name as the SQL-functions.
 
-\marginpar{Features}%
-\todo{Soll das Folgende in den Anhang?}
+\marginpar{Dealing with Hotfixes\\ \cite{Lukonin2017}}%
+To apply Flyway migrations out of order and fill in any gaps, you can enable the \textit{outOfOrder} property. This is useful in situations where your production environment is at version an older version, but your dev and test environments are already at a new version. If you now need to run a hotfix in between, you will need to activate the \textit{outOfOrder} property to apply the hotfix. As described in the introduction \autoref{best_practices}, if you have multiple developers working on different branches, it may be helpful to enable the \textit{outOfOrder} property to allow for more flexibility in the migration and branching process.
 
-In the following paragraph, a few very useful flyway commands are presented:\\
+
+\marginpar{Flyway Teams \cite{FlywayTeams}}%
+The Pro-Version of Flyway is called Flyway Teams. This pro version costs (as of creation of this work) 447€ per user per year. It offers:
+\begin{itemize}
+	\item Additional migration controls
+	\item Protect against failed deployments
+	\item Professional echnical support from Redgate
+	\item Support for older DB versions
+	\item Built-in Git client and object-level versioning
+\end{itemize}
+
+In comparison to the team version, the free open source version includes the core functionalities with a Desktop GUI support for only the current DB versions and support through community. The core functionalities include the six basic commands: Migrate, Clean, Info, Validate, Baseline and Repair.\\
+
+A comparison between the Flyway editions can be found here \autoref{label}.\\
+\todo{Liste einfügen in Anhang}
+
+\marginpar{Community}%
+Stars on GitHub: 6'800 (31. October 2022)\\
+Tags in StackOverflow: 2,088 (31. October 2022)\\
+
+\marginpar{Learning\\ Materials}%
+If you have never worked with Flyway before there are the following ways to educate yourself:
+\begin{itemize}
+	\item \href{https://www.red-gate.com/hub/university/courses/flyway}{Redgate University Flyway training courses}
+	\item \href{https://flywaydb.org/documentation}{Get Started Documentation}
+	\item \href{https://www.youtube.com/playlist?list=PLhFdCK734P8DYHYYWaJpzJJ-qZFZ_JTHM}{Redgate Youtube Channel}
+	\item \href{https://www.youtube.com/watch?v=dzRzlDpdDW4}{Flyway talk by Sandra Parsick}
+\end{itemize}
+
+\section{Features \label{flyway_features}}
+Below are some of the most useful Flyway commands are presented:
+
 
 \textbf{Info}\\
 Get an overview of the applied migrations and their success status.\\
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.4\textwidth]{./chapters/intro_flyway/images/command-info}
+	\includegraphics[width=0.8\textwidth]{./chapters/intro_flyway/images/command-info}
 	\caption[Flyway Info - Source: \cite{FlywayGetStarted}]{Flyway Info}
 	\label{fig:command-info}
 \end{figure}
@@ -147,37 +176,32 @@ The undo-command is a Teams Edition feature only.
 This command makes the current database as the baseline for the future. This will cause Migrate to ignore all migration up to the actual version.
 This can be useful to reduce the overhead, if you have many old migrations scripts that will not be used anymore.
 
-\marginpar{Flyway Teams \cite{FlywayTeams}}%
-The Pro-Version of Flyway is called Flyway Teams. This pro version costs (as of creation of this work) 447€ per user per year. It offers:
-\begin{itemize}
-	\item Additional migration controls
-	\item Protect against failed deployments
-	\item Professional echnical support from Redgate
-	\item Support for older DB versions
-	\item Built-in Git client and object-level versioning
-\end{itemize}
-
-In comparison to the team version, the free open source version includes the core functionalities with a Desktop GUI support for only the current DB versions and support through community. The core functionalities include the six basic commands: Migrate, Clean, Info, Validate, Baseline and Repair.\\
-
-A comparison between the Flyway editions can be found here \autoref{label}.\\
-\todo{Liste einfügen in Anhang}
-
-\marginpar{Community}%
-Stars on GitHub: 6'800 (31. October 2022)\\
-Tags in StackOverflow: 2,088 (31. October 2022)\\
-
-\marginpar{Learning\\ Materials}%
-If you have never worked with Flyway before there are the following ways to educate yourself:
-\begin{itemize}
-	\item \href{https://www.red-gate.com/hub/university/courses/flyway}{Redgate University Flyway training courses}
-	\item \href{https://flywaydb.org/documentation}{Get Started Documentation}
-	\item \href{https://www.youtube.com/playlist?list=PLhFdCK734P8DYHYYWaJpzJJ-qZFZ_JTHM}{Redgate Youtube Channel}
-	\item \href{https://www.youtube.com/watch?v=dzRzlDpdDW4}{Flyway talk by Sandra Parsick}
-\end{itemize}
-
 \section{Installation and Setup}
-\marginpar{Different usages of Flyway}%
-\todo{https://flywaydb.org/documentation/usage/plugins/}
+\marginpar{Different usages of Flyway \cite{FlywayGetStarted}}%
+Flyway can be used with the following programs or tools.
+
+\begin{minipage}[t]{0.5\textwidth}
+\textbf{Flyway Clients}
+
+\begin{itemize}
+	\item Command Line
+	\item Java API
+	\item Maven
+	\item Gradle
+\end{itemize}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+	\textbf{Third Party Plugins}
+	\begin{itemize}
+		\item Jenkins
+		\item IntelliJ IDEA
+		\item NPM
+		\item Play
+		\item Spring Boot
+		\item etc.
+	\end{itemize}
+\end{minipage}
+\vspace{0.3cm}
 
 \marginpar{CLI installation}%
 Download the latest version of the \href{https://flywaydb.org/download/community}{Flyway Cummunity Edition} and extract the downloaded file. To execute the flyway commands, one need a java installation.

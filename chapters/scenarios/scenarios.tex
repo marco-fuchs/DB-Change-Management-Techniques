@@ -123,8 +123,9 @@ After this last migration the flyway schema history looks like the following:
 \end{figure}
 For every migration the date inclusive time, the script or the user that applied the script is stored.
 
-\marginpar{Failed migration}%
-If a migration fails, an automated rollback is applied.
+\marginpar{Failed migration \cite{Lukonin2017}}%
+Flyway automatically wraps every migration script in a transaction, which allows for automatic rollback in case of an error. If your database supports DDL transactions (such as PostgreSQL), the entire migration script will be rolled back automatically. However, if you are using SQL Server, the DDL queries will be committed automatically, so you will need to create manual rollback scripts or use idempotent scripts to roll back the changes. If your migration script does not contain DDL commands, it will generally be automatically rolled back by most database engines in case of an error.\\
+To make the rollback process easier, Flyway supports rollback scripts, which can be created for every versioned migration file using the naming convention \textit{U\#\#\#\_\_text.sql}. If a migration fails, Flyway will automatically run the corresponding rollback script. The UNDO command (see \autoref{flyway_features}) can also be used to manually trigger a rollback, which will roll back the latest migration by default. Alternatively, taking a snapshot of the database before release and restoring it if any migration goes wrong is the cleanest approach, but may not always be feasible. It is important to have a well-designed rollback strategy in place, which may involve creating proper rollback scripts and using idempotent migrations to make the process easier.
 
 \subsection{Usage with Java API}
 \marginpar{JavaAPI}%
