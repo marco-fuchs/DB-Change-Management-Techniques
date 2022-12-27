@@ -1,0 +1,47 @@
+%!TeX spellcheck = en
+
+\chapter{Discussion}
+
+\section{Results}
+
+\marginpar{Change Management}%
+Key takeaways from \cite{Piairo2018}:\\
+
+\begin{itemize}
+	\item Databases, although different from applications, can and should be included in the same development process as applications. We call this database shift left.
+	\item When all database changes are described with scripts, source control can be applied and the database development process can include continuous integration and continuous delivery activities, namely taking part in the deployment pipeline.
+	\item Automation is the special ingredient that powers up the deployment pipeline making it repeatable, reliable and fast, reducing fear for database changes.
+	\item Migrations-based and state-based are two different approaches to describing a database change. Independently of the choice, small batches are always a good choice.
+	\item The deployment pipeline is a technical and cultural tool where DevOps values and practices should be reflected according to the needs of each organization.    
+\end{itemize}
+
+\todo{..}
+
+\marginpar{Flyway vs Liquibase}%
+Flyway and Liquibase are both open-source database change management tools that help organizations track, version, and deploy changes to their databases. Both tools support a wide range of database platforms and offer features such as version control, change tracking, and rollback capabilities.
+
+One key difference between the two tools is the way in which changes are defined. Flyway uses SQL scripts to define changes, while Liquibase allows changes to be defined using XML, YAML, or JSON files. This means that Liquibase provides an abstraction layer that can make it easier to manage changes in environments where the underlying database technology may vary.
+
+Another difference is the way in which changes are applied. Flyway applies changes in a linear, version-based sequence, while Liquibase allows for more flexible change ordering and dependencies. This can make Liquibase better suited for complex change management scenarios, but may also make it more difficult to use for simple deployments.
+
+Overall, the choice between Flyway and Liquibase will depend on the specific needs and constraints of an organization. Both tools are widely used and have strong communities of users and contributors, so either tool may be a good fit for a given project.
+
+
+
+
+
+
+
+\section{Lesson learned}
+This section will go over the learned lessons during this project.
+
+
+
+
+
+
+
+
+
+
+
