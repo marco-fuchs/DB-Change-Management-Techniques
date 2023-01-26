@@ -3,7 +3,36 @@
 
 \chapter{Introduction to Liquibase}
 \section{Overview}
-The Liquibase tool is a database schema change management solution that enables fast and safe database change releases from development to production.
+\marginpar{Overview}
+
+The Liquibase \cite{Liquibase} tool is a database schema change management solution that enables fast and safe database change releases from development to production. Liquibase \cite{Liquibase} will help to:
+
+\begin{itemize}
+	\item Control database schema changes for specific versions.
+	\item Eliminate errors and delays when releasing databases.
+	\item Automatically order scripts for deployment.
+	\item Easily rollback changes.
+	\item Collaborate with already used tools.
+\end{itemize}
+
+Additionally, Liquibase \cite{Liquibase} works with over 50 databases categorized on different verification levels. Table \ref{tab:IntroductionToLiquibase:DBVerificationLevels}
+
+\begin{table}[H]
+	\centering
+	\ra{1.3}
+	\begin{tabularx}{\textwidth}{ll} 
+		\toprule
+		Verification Level & Description \\ 
+		\midrule
+		Guaranteed & \makecell[l]{Database tested and certified by Liquibase and works with all\\ Liquibase Pro capabilities.} \\[10pt]
+		Foundational & \makecell[l]{Database tested and certified by Liquibase with the full set of\\ open source capabilities. Liquibase Pro functionality is not\\ guaranteed.} \\[10pt]
+		Compatible & \makecell[l]{Widely reported as working by the community but has incomplete\\ functionality. Best effort support provided by Liquibase.} \\[10pt]
+		Unverified & \makecell[l]{Not enough information for assessment. Best effort support\\ provided through community forums.} \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Supported Database, Verification Levels}
+	\label{tab:IntroductionToLiquibase:DBVerificationLevels}
+\end{table}
 
 \section{How It Works}
 
