@@ -4,15 +4,34 @@
 %
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-
+\makenoidxglossaries
 
 % Glossary entries
+\newglossaryentry{SQLg}{name={sturctured query language}, description={Domain specific language used in programming designed for managing data held in a relational database management system. \cite{SQLWiki}}}
+
+\newglossaryentry{JAVAg}{name={Java}, description={General purpose programming language \cite{JavaWiki}}}
+
 \newglossaryentry{equation}{name=Equation, description={Some mathematical stuff}}
 
+
+
 % Acronyms
+
+\newglossaryentry{SQL}{type=\acronymtype, 
+	name={SQL}, 
+	description={Structured Query Language}, 
+	first={structured query language (SQL) \glsadd{SQLg}}, see=[Glossary:]{SQLg}}
+
+\newacronym{GUI}{GUI}{graphical user interface}
+\newacronym{DB}{DB}{database}
+\newacronym{DDL}{DDL}{data definition language}
+\newacronym{DML}{DML}{data manipulation language}
+\newacronym{CLI}{CLI}{command line interface}
+\newacronym{VCS}{VCS}{version control system}
+
+
 \newacronym{svm}{SVM}{support vector machine}
-\newacronym{API}{API}{Application Programming Interface}
+\newacronym{API}{API}{application programming interface}
 \newacronym{GNN}{GNN}{Graph Neural Network}
 
-\makeglossaries
-%\makenoidxglossaries
+%\makeglossaries

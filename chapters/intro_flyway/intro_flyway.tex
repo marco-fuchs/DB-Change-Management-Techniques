@@ -6,40 +6,32 @@
 
 \section{Overview}
 \marginpar{Information}%
-Flyway is a tool that makes database migrations easy and provides version control for your database. It is a multi-platform and cross-database tool with support for over 20 databases.
-Axel Fontaine from Google Code created Flyway in 2010, and acquired by Redgate Software by 2019. Flyway is currently at the 9th version when creating this work. The creator was looking for a simple method to implement database changes easily and directly in SQL. His main goal was, to include database changes as part of the software deployment process \cite{Robles2021}.
-Flyway uses the freemium business model.  The basic version is free and open source \cite{Fontaine2010} and additionally there is a paid Teams or Enterprise Edition available.\\
-With flyway you can either write migration files with SQL (database-specific syntax (such as PL/SQL, T-SQL, etc.) or Java (for advanced data transformations or dealing with LOBs). Flyway is able to connect to databases hosted in either on-premises or cloud environments, thanks to the included JDBC driver library that is shipped with the tool. It runs on all modern platforms such as Linux, Mac or Windows.  \cite{Dillon2022}, \cite{DBMSTools}
+Flyway is a tool that makes database migrations easy and provides version control for databases. It is a multi-platform and cross-database tool with support for over 20 databases.
+Axel Fontaine from Google Code created Flyway in 2010 and was acquired by Redgate Software in 2019. Flyway is currently at the 9th version when creating this work. The creator was looking for a simple method to implement database changes quickly and directly in \gls{SQLg}. His main goal was to include database changes as part of the software deployment process \cite{Robles2021}.
+Flyway uses the freemium business model. The basic version is free and open source \cite{Fontaine2010} and additionally, there is a paid Teams or Enterprise Edition available.
+
+With Flyway, migration files are written in either with \gls{SQLg} (database-specific syntax (such as PL/SQL, T-SQL) or \gls{JAVAg} (for advanced data transformations or dealing with LOBs). Flyway can connect to databases hosted in on-premises or cloud environments, thanks to the included JDBC driver library that is shipped with the tool. It runs on all modern platforms, such as Linux, Mac or Windows.  \cite{Dillon2022} \cite{DBMSTools}
 
 
-\marginpar{Migrations \cite{Parsick2018}, \cite{Lukonin2017}}%
-There are four possibilities of migrations as shown in \autoref{tab:migration_types}. There are versioned migrations with scripts that have a unique meaning, which are executed only once. These versioned migrations are mainly used for Data Definition Language (DDL) like a create or modify a table. \\
+\marginpar{Migrations \cite{Parsick2018} \cite{Lukonin2017}}%
+There are four possibilities of migrations as shown in \autoref{tab:migration_types}. There are versioned migrations with scripts with a unique meanings, executed only once. These versioned migrations are mainly used for Data Definition Language (DDL), like creating or modifying a table.
 
-Repeatable migration scripts do not have a version number. These are always if their checksum changes and always after the versioned migrations are applied. Typical applications for repeatable tasks are import base data, rebuild views or indexes, adding permissions or other maintenance tasks.
+Repeatable migration scripts do not have a version number. These are always if their checksum changes and after the versioned migrations are applied. Typical applications for repeatable tasks are importing base data, rebuilding views or indexes, and adding permissions or other maintenance tasks.
 
 \begin{table}[h]
 	\centering
-	\begin{tabularx}{8cm}{X|c c}
-		& Versioned & Repeatable \\ \hline
+	\begin{tabularx}{8cm}{X c c}
+		Basis & Versioned & Repeatable \\ \toprule
 		SQL based & \checkmark & \checkmark \\
 		Java based & \checkmark & \checkmark \\
 	\end{tabularx}
-	\caption{Migration Types - Based on \cite{Parsick2018}}
+	\caption{Migration Types - Based on Parsick et al. \cite{Parsick2018}}
 	\label{tab:migration_types}
 \end{table}
 
-%\begin{center}
-%\begin{tabularx}{8cm}{X|c c}
-%	& Versioned & Repeatable \\ \hline
-%SQL based & \checkmark & \checkmark \\
-%Java based & \checkmark & \checkmark \\
-%\end{tabularx}
-%\end{center}
-
-
-\marginpar{SQL migrations}%
-Flyway developers can migrate changes directly with SQL. Per default, flyway takes the database migrations from the directory \textit{sql}.
-These SQL migration files have to follow the naming convention:\\
+\marginpar{SQL Migrations}%
+Flyway developers can migrate changes directly with \gls{SQLg}. Per default, Flyway takes the database migrations from the directory \textit{sql}.
+These \gls{SQLg} migration files have to follow the naming convention:
 
 \begin{center}
 \begin{tabularx}{8cm}{r l}
@@ -55,10 +47,15 @@ Repeatable & \texttt{\textcolor{blue}{R}\textcolor{red}{\_\_}\textcolor{orange}{
 \textcolor{orange}{Description}\\
 \end{flushright}
 
-These SQL scripts can have several rows and allowed is all database specific syntax including comments. These SQL migrations are mainly used for DDL changes such as create, alter, drop, etc. or for simple data changes.
+\todo{Table and Legend are ugly.}
 
-\marginpar{Java migrations}%
-Unlike changes in SQL, changes in java are more for BLOB or CLOB changes or for advanced changes to a large data set like recalculations. The naming convention is pretty similar, only the ending differs.\\
+These \gls{SQL} scripts can have several rows and allow all database-specific syntax, including comments. These \gls{SQL} migrations are mainly used for DDL changes such as create, alter, and drop for simple data changes.
+
+\marginpar{Java Migrations}%
+Unlike changes in \gls{SQL}, \gls{JAVAg} changes are more for BLOB or CLOB changes or for progressive changes to an extensive data set like recalculations. The naming convention is similar; only the ending differs.
+
+\todo{Add BLOB, CLOB to glossary.}
+
 \begin{center}
 	\begin{tabularx}{8cm}{r l}
 		Versioned & \texttt{\textcolor{blue}{V}\textcolor{green}{1\_1\_1}\textcolor{red}{\_\_}\textcolor{orange}{create\_table}.java}\\
@@ -66,9 +63,8 @@ Unlike changes in SQL, changes in java are more for BLOB or CLOB changes or for 
 	\end{tabularx}
 \end{center}
 
-\marginpar{Advanced changes\\ \cite{Parsick2018}}%
-Sometimes you have to intervene between certan migration steps. For example, when creating a materialized view. This functionality is provided by flyway with callback functions. 
-
+\marginpar{Advanced Changes\\ \cite{Parsick2018}}%
+Some migration steps need user intervention, for example, creating a materialized view. This functionality is provided by flyway with callback functions. 
 
 \begin{figure}[H]
 	\centering
@@ -77,7 +73,7 @@ Sometimes you have to intervene between certan migration steps. For example, whe
 	\label{fig:advanced_migrations}
 \end{figure}
 
-There are several options for the execution times. These times are recognized with the help of the names. One can either write this callbacks in SQL or in Java. 
+There are several options for the execution times. The defined naming convention recognizes these times. The callbacks can be written in \gls{SQLg} or \gls{JAVAg}. 
 
 \begin{lstlisting}[caption=SQL Callback Functions for Flyway - Source: \cite{FlywayCallbacks}]
 BeforeMigrate.sql
@@ -86,7 +82,7 @@ AfterEachMigrate.sql
 AfterMigrate.sql
 \end{lstlisting}
 
-If the task needs to be more powerful or flexible, Java callbacks can be formulated as following:
+If the task needs to be more powerful or flexible, \gls{JAVAg} callbacks can be formulated as follows:
 \begin{lstlisting}[caption=Java Callback Functions before clean - Source: \cite{FlywayCallbacks}]
 public interface FlywayCallback {
 	/**
@@ -101,7 +97,7 @@ public interface FlywayCallback {
 Other callback function can be formulated with the same name as the SQL-functions.
 
 \marginpar{Dealing with Hotfixes\\ \cite{Lukonin2017}}%
-To apply Flyway migrations out of order and fill in any gaps, you can enable the \textit{outOfOrder} property. This is useful in situations where your production environment is at version an older version, but your dev and test environments are already at a new version. If you now need to run a hotfix in between, you will need to activate the \textit{outOfOrder} property to apply the hotfix. As described in the introduction \autoref{best_practices}, if you have multiple developers working on different branches, it may be helpful to enable the \textit{outOfOrder} property to allow for more flexibility in the migration and branching process.
+To apply Flyway migrations out of order and fill in any gaps, activate the \textit{outOfOrder} property. This functionality is useful when the production environment is older, but the development and test environments are already at a new version. Hotfixes in between can then be applied by activating the \textit{outOfOrder} property. In addition, as described in the introduction \autoref{best_practices}, if you have multiple developers working on different branches, it may be helpful to enable the \textit{outOfOrder} property to allow for more flexibility in the migration and branching process.
 
 
 \marginpar{Flyway Teams \cite{FlywayTeams}}%
@@ -109,12 +105,12 @@ The Pro-Version of Flyway is called Flyway Teams. This pro version costs (as of 
 \begin{itemize}
 	\item Additional migration controls
 	\item Protect against failed deployments
-	\item Professional echnical support from Redgate
+	\item Professional technical support from Redgate
 	\item Support for older DB versions
 	\item Built-in Git client and object-level versioning
 \end{itemize}
 
-In comparison to the team version, the free open source version includes the core functionalities with a Desktop GUI support for only the current DB versions and support through community. The core functionalities include the six basic commands: Migrate, Clean, Info, Validate, Baseline and Repair.\\
+Compared to the team version, the free, open-source version includes the core functionalities with desktop \gls{GUI} support for only the current database versions and support through the community. The core functionalities include the six basic commands: migrate, clean, info, validate, baseline and repair.
 
 A comparison between the Flyway editions can be found here \autoref{label}.\\
 \todo{Liste einfügen in Anhang}
@@ -124,7 +120,8 @@ Stars on GitHub: 6'900 (27. December 2022)\\
 Tags on StackOverflow: 2,118 (31. December 2022)\\
 
 \marginpar{Learning\\ Materials}%
-If you have never worked with Flyway before there are the following ways to educate yourself:
+Please refer to the following sources to get started with Flyway:
+\todo{List of Links? maybe add cite?}
 \begin{itemize}
 	\item \href{https://www.red-gate.com/hub/university/courses/flyway}{Redgate University Flyway training courses}
 	\item \href{https://flywaydb.org/documentation}{Get Started Documentation}
@@ -146,16 +143,16 @@ Get an overview of the applied migrations and their success status.\\
 	\label{fig:command-info}
 \end{figure}
 
-
+\todo{write all titles big or small?}
 \textbf{clean}\\
-With \texttt{flyway clean} one can drop all objects like tables, views, triggers, etc. in the configures schemas.It can easily give you a fresh start but is dangerous in a production environment.
+With \texttt{flyway clean}, one can drop all objects, like tables, views and triggers, in the configured schemas. It serves as a reset but is dangerous in a production environment.
 
 \textbf{Validate}\\
-If one want to be sure that all migrations are applied correctly,  \texttt{flyway validate} is the command of choice. The validation checks if the migration locally still has the same checksum as the migration executed in the database.
-There is a possibility to apply custom validation rules. Because in a productive environment, there will be hotfixes, deleted migrations and other changes that break the default validation conventions (Flyway Teams Edition only).
+To ensure that all migrations are applied correctly,  \texttt{flyway validate} is the choice command. The validation checks if the migration locally has the same checksum as the migration executed in the database.
+There is a possibility to apply custom validation rules. Because in a productive environment, there will be hotfixes, deleted migrations and other changes that break the default validation conventions. Custom rules are only available in the teams edition.
 
 \textbf{Repair}\\
-But if something is broken, you can use this command to repair the database and especially the checksum. When a database migration fails, the migration is markes as failed in the schema history table (\textit{flyway\_schema\_history}). If a database supports DDL \footnote{Data Definition Language} transactions (like PostgreSQL), the failed migration is rolled back automatically and nothing is recorded in the schema history table.  But if the database does not support DDL transactions (e.g. Oracle Database, MySQL, MariaDB), you have two options to repair the database and remove the failed entries:
+However, if something is broken, the repair command can repair the database, especially the checksum. For example, when a database migration fails, the migration is marked as failed in the schema history table (\textit{flyway\_schema\_history}). However, if a database supports \gls{DDL} transactions (like PostgreSQL), the failed migration is rolled back automatically, and nothing is recorded in the schema history table. Nevertheless, if the database does not support DDL transactions (e.g. Oracle Database, MySQL, MariaDB), you have two options to repair the database and remove the failed entries:
 
 \begin{enumerate}
 	\item Run \texttt{flyway repair}\\
@@ -168,13 +165,10 @@ But if something is broken, you can use this command to repair the database and 
 
 
 \textbf{Undo}\\
-To undo the most recent migration applied to the database, run \texttt{flyway undo}. The undo command can be repeated until the database is converted back to version 1.
-Undo assumes that the previous applied migration succeeded and now should be undone. If the previsous applied migration failed, first repair the migrations before applying the undo-command. 
-The undo-command is a Teams Edition feature only.
+To undo the most recent migration applied to the database, run \texttt{flyway undo}. The undo command can be repeated until the database is converted back to version 1. Undo assumes that the previously applied migration succeeded and now should be undone. If the previously applied migration fails, repair the migrations before applying the undo command. The undo command is a Teams Edition feature only.
 
 \textbf{Baseline}\\
-This command makes the current database as the baseline for the future. This will cause Migrate to ignore all migration up to the actual version.
-This can be useful to reduce the overhead, if you have many old migrations scripts that will not be used anymore.
+This command makes the current database the baseline for the future. This will cause the migrate command to ignore all migrations up to the actual version. This can be useful to reduce the overhead if many old migrations scripts exist that will not be used again.
 
 \section{Installation and Setup}
 \marginpar{Different usages of Flyway \cite{FlywayGetStarted}}%
@@ -184,8 +178,8 @@ Flyway can be used with the following programs or tools.
 \textbf{Flyway Clients}
 
 \begin{itemize}
-	\item Command Line
-	\item Java API
+	\item \Gls{CLI}
+	\item \gls{JAVAg} \acrshort{API}
 	\item Maven
 	\item Gradle
 \end{itemize}

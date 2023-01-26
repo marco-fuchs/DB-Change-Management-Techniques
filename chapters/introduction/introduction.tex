@@ -6,46 +6,45 @@
 \section{Problem Statement and Benefits}%
  
  \marginpar{Motivation\\ \cite{techopedia2022}, \cite{Choudhry2018}, \cite{Parsick2018}}%
- In the last 20 years, agile approaches have spread in their popularity. One principle of agile methods is, how to deal with change. This has changed massively compared to previous not agile methods. If you are operating agile, you want to allow changes, even late in the project. But in contrast, the database community has traditionally considered database design to be something that needs to be planned in advance.\\
+ In the last 20 years, agile approaches have spread in their popularity. One principle of agile methods is how to deal with change. This has changed massively compared to previous, not agile methods. For example, in agile development, changes are allowed even in the late stages of the project. However, the database community has traditionally considered database design to be something that is planned.
  
- In this complex and agile company environment, it is very hard to keep track of the database changes. Handling relational database changes requires special consideration and offer different challenges than deploying classical software. Database systems suffer from problems such as untracked changes, overwritten code, data-loss or data mix-up. Such shortcomings applied to the production database can be a major risk. Manual modification of database structures can be very time-consuming and error-prone. Nobody knows which database scripts have been migrated on which database instances. 
- Without a clearly defined process, database migration scripts are recorded for example on release notes or ticket systems..
-In addition, no one may know how the test database differs from the production database.\\
+Keeping track of database changes in complex and agile company environments is tough. Handling relational database changes requires special consideration and offers different challenges than deploying classical software. Database systems need help with problems such as untracked changes, overwritten code, data loss or mix-ups. Such shortcomings applied to the production database can be a significant risk. Manual modification of database structures can be very time-consuming and error-prone. Nobody knows which database scripts are applied to which database instances. 
+Without a clearly defined process, database migration scripts are recorded, for example, on release notes or ticket systems.
+In addition, no one may know how the test database differs from the production database.
  
- For that reason, these migrations are best done automatically so it does not come to downtime or errors. A proper database change management ensures that changes to a database are controlled and safe. According to \cite{ManageForce2016}, 80\% of unplanned database downtime id due database changes.
-Developers need a good strategy, how to apply changes to the same database environment.
-This requires a best practices strategy on how to deal with different users, branches and applications. Using a proper management system can prevent a developer of running into a very annoying \textit{Column not found} error.\\
+For that reason, migrations are best done automatically to avoid downtime or errors. In addition, proper database change management ensures that changes to a database are controlled and safe. According to \cite{ManageForce2016}, 80\% of unplanned database downtime is due to database changes.
+Developers need an excellent strategy for how to apply changes to the same database environment.
+This problem requires a best practices strategy for dealing with different users, branches and applications. Using a proper management system can prevent a developer from running into a very annoying \textit{Column not found} error.
 
 \marginpar{SQL DDL/DML\ \cite{Fritchey2011}}%
-But why not just use SQL DDL/DML as source for the change management?
-SQL DDL and DML statements are used to create, modify, and query the structure and data of a database, respectively. While these statements can be used to make changes to a database, they are not well-suited for change management in the broader sense.
+However, why not just use SQL \gls{DDL}/\gls{DML} as a source for change management? SQL DDL and DML statements are used to create, modify, and query the structure and data of a database, respectively. While these statements can be used to make changes to a database, they are not suited for change management in the broader sense.
 
-Change management refers to the process of tracking, reviewing, approving, and implementing changes to a system or process. In the context of a database, this would involve not only making changes to the structure and data of the database using SQL statements, but also documenting and communicating those changes to stakeholders, testing the changes to ensure that they have the desired effect and do not break any existing functionality, and rolling back changes if necessary.
+Change management refers to tracking, reviewing, approving, and implementing changes to a system or process. In the context of a database, this would involve not only making changes to the structure and data of the database using SQL statements but also documenting and communicating those changes to stakeholders, testing the changes to ensure that they have the desired effect and do not break any existing functionality, and rolling back changes if necessary.
 
 Database change management systems are designed to support this process by providing a framework for managing and automating the entire change management process. These systems typically include features such as version control, change tracking, approval workflows, and rollback capabilities, which make it easier to manage and coordinate changes to a database.
 
-Using a database change management system can help ensure that changes to a database are made in a controlled and consistent manner, reducing the risk of errors and downtime. It can also improve collaboration and communication among team members, and make it easier to audit and document changes to the database.
+Using a database change management system can help ensure that changes to a database are made controlled and consistently, reducing the risk of errors and downtime. It can also improve collaboration and communication among team members and make it easier to audit and document changes to the database.
  
 \marginpar{Benefits}%
-With the problems and shortcomings mentioned above, it is very useful to implement certain automatism or use so-called change management tools in the deployment pipeline.
-\cite{Dillon2022}, \cite{Robles2021} and \cite{Fritchey2022} present the benefits a change management tool should provide or at least make it easier to use. These benefits are summarized in the following.
+With the problems and shortcomings mentioned above, it is beneficial to implement certain automatism or use so-called change management tools in the deployment pipeline.
+\cite{Dillon2022}, \cite{Robles2021}, and \cite{Fritchey2022} present the benefits a change management tool should provide or at least make it easier to use. The following list summarises the benefits of using database change management tools.
 
 \begin{enumerate}
-	\item Unique identification of all migrations and recording in a migration history table
-    \item Automatically deploy scripts and keep track whether they are already applied or not
+	\item Unique identification of all migrations and recording in a migration history table.
+    \item Automatically deploy scripts and keep track whether they are already applied or not.
     \item Branching and merging for development in teams
-    \item Embed easily into products or build tools
-    \item Make it easy to undo or revert changes without requiring a restore
-    \item Reproduce schema changes across multiple environments and auditing of these changes
-    \item Provide automation so you can do schema changes automatically without manual effort
-    \item An additional backup of the code that defines the database
+    \item Embed easily into products or build tools.
+    \item Make it easy to undo or revert changes without requiring a restore.
+    \item Reproduce schema changes across multiple environments and auditing of these changes.
+    \item Provide automation so you can do schema changes automatically without manual effort.
+    \item An additional backup of the code that defines the database.
 \end{enumerate}
 
 
-Furthermore, a migration can be used as single source of truth for the actual production schemas. This becomes very handy, as soon as one has to manage and update multiple database environments with different deployment states.
+Furthermore, migration can be used as the single source of truth for the actual production schemas. This becomes very handy once multiple database environments are updated with different deployment states.
 
 \marginpar{Context}%
-This seminar thesis focuses on database migrations in the context of schema migrations.  Other database migrations such as moving a database to a different platform or a cloud are not considered in the context of this work.
+This seminar thesis focuses on database migrations in the context of schema migrations.  Other database migrations, such as moving a database to a different platform or a cloud, are not considered in the context of this work.
 
 \newpage
 \section{State of the Art}%
@@ -55,12 +54,13 @@ In most organizations, the way in which database changes are handled is differen
 
 \begin{enumerate}
 	\item \textit{Database changes are not included in the deployment pipeline}\\
-	If changes in the database are not included in the pipeline, most migrations are performed manually which is resulting in risks and ultimately into costs. Not including the database changes at all lead to lacks in traceability and promotes the fear of every change.
+	If changes in the database are not included in the pipeline, most migrations are performed manually, which results in risks and costs. Furthermore, not including the database changes leads to a lack of traceability and promotes the fear of every change.	
 	
 	\item \textit{Database and application changes have a different deployment process}\\
-	Software developers use continuous delivery to manage their deployment of the software. In a nowadays modern agile environment, the demand for techniques that support this agile processes are desired. A lot of teams use similar techniques when it comes to database change management and add their database changes as scripts in version control tools in a separate pipeline. Most developers know very well how to use the tools from software development and can apply these version control techniques for their database environment. If a database has an encapsulate pipeline to the application, this means that the application development team and the database administrator have to keep synchronized. As a result, agile delivery processes become slowed down by database deployment and synchronization with the application.
+	Software developers use continuous delivery to manage their deployment of the software. The demand for techniques that support these agile processes is desired in a modern agile environment. Many teams use similar techniques regarding database change management and add their database changes as scripts in version control tools in a separate pipeline. Most developers know how to use software development tools very well and can apply these version control techniques to their database environment. However, if a database has an encapsulated pipeline to the application, the application development team and the administrator must keep it synchronized. As a result, agile delivery processes become slowed down by database deployment and synchronization with the application.
 	
-	Team members, including DBAs, need to be able to see how changes are progressing so they can know what changes are planned, how their testing is going, and which schema changes have been implemented in production databases.
+	\todo{Whats DBA?, add to glossary}
+	Team members, including DBAs, need to see how changes are progressing to know what changes are planned, how their testing is going, and which schema changes have been implemented in production databases.
 	
 	\item \textit{Database and application share a deployment process}
 	According to  \cite{GoogleDevOps2022}, this is the best pratice method which can be achieved by this:
@@ -72,38 +72,37 @@ In most organizations, the way in which database changes are handled is differen
 
 \end{enumerate}
 
+\subsection{Deployment Workflows}
+\marginpar{Multiple Environments \cite{Lukonin2017}}%
+In many cases, three instances of the database are needed in parallel. One database for development is located locally with each developer. The second database is for testing purposes before deploying, and the third is the production database. Therefore, each developer should use his/her local database copy and branch.
 
+Migration tools like Flyway or Liquibase can be used in these three environments. They allow local integration and use and integration into the CI pipeline in which the test database is used. Change management tools can also be integrated into the production environment, for example, in the cloud. 
 
-\subsection{Deployment workflows}
-\marginpar{Multiple environments \cite{Lukonin2017}}%
-In many cases, three instances of the database are needed in parallel. One database for development is located locally with each developer. The second database is for testing purposes before deploying and the third is the actual production database. Therefore each developer should use his/hers own local database copy and own branch.\\
-The migration tools like flyway or liquibase can be used in all of these three environments. They allow local integration and use as well as integration into the CI pipeline in which the test database is used. Change management tools can also be integrated into the production environment in which for example run in the cloud. 
-
-Using multiple environments with Flyway is possible, because Flyway is a thread-safe tool that can be used to manage database migrations in environments with multiple instances of an application running simultaneously. Each instance will run the Flyway "migrate" command and apply the necessary migrations to the database. Flyway locks the SCHEMA\_VERSION table during each migration to prevent conflicts or duplicate migrations. This means that other instances will wait until the current migration is completed before proceeding. Multiple instances of Flyway can grab different migrations and apply them in the order defined by their version numbers. However, if multiple instances of the application are initialized at the same time during the initial deployment, and the SCHEMA\_VERSION table does not yet exist, there is a risk of failure. To prevent this, you can run Flyway manually from the command line when deploying for the first time, create the SCHEMA\_VERSION table in advance, or start the second and subsequent instances of the application with a delay to allow the first instance enough time to create the table.
-
-
-
+\todo{"migrate" other times with textit? consitency}
+\todo{Flyway specific paragraph in general chapter? Maybe move chapters?}
+Using multiple environments with Flyway is possible because Flyway is a thread-safe tool that can manage database migrations in environments with multiple instances of an application running simultaneously. Each instance will run the Flyway "migrate" command and apply the necessary migrations to the database. Flyway locks the SCHEMA\_VERSION table during each migration to prevent conflicts or duplicate migrations. This means other instances will wait until the current migration is completed before proceeding. Multiple instances of Flyway can grab different migrations and apply them in the order defined by their version numbers. However, if multiple application instances are initialized simultaneously during the initial deployment, and the SCHEMA\_VERSION table does not yet exist, there is a risk of failure. To prevent this, run Flyway manually from the command line when deploying for the first time, create the SCHEMA\_VERSION table in advance, or start the second and subsequent application instances with a delay to allow the first instance enough time to create the table.
 
 \subsection{Best Practices for database migrations \label{best_practices}}%
 \marginpar{Best practices methods  \cite{Parsick2018}, \cite{F5works2017}, \cite{Langan2022}, \cite{Heppell2021}, \cite{Lukonin2017}}%
 
-Regardless of what strategy or tools a developer needs, there are certain best practices that simplify dealing with database changes.
+Specific best practices simplify dealing with database changes regardless of what strategy or tools a developer needs.
 
 \begin{itemize}
 	\item Use a version control system\\
-	Whether you use a migration tool or not it make sense to version control all artefacts like DDL, DML, test data, configurations, functions etc with a version control system (VCS).
+	Whether a migration tool is used or not, it is advised to version control all artefacts like DDL, DML, test data, configurations, and functions with a \gls{VCS}.
 	\item Automate the deployment process\\
 	Manual changes can easily lead to mistakes and need manual rollbacks. Therefore use an automation and migration tool that can avoid costly mistakes and have the ability to roll back.
 	\item Atomic changes\\
-	For example, when there is code change that requires changing 2 database tables plus patching existing data, there should be at least 3 scripts.
+	For example, when a code change requires changing two database tables and patching existing data, there should be at least three scripts.
 	\item Naming convention\\
-	A team or company should agree on a naming convention for the migration files. It is recommended to use an ascending naming convention, for example with increasing file names.
+	A team or company should agree on a naming convention for the migration files. It is recommended to use an ascending naming convention, for example, with increasing file names.
+	
 	\begin{lstlisting}[caption=Increasing file names]
 		V001__first_change.sql
 		V002__second_change.sql
 		V003__third_change.sql
 	\end{lstlisting}
-	Instead of using integers to identify versions of the delta file, using timestamps can significantly reduce the likelihood of conflicts. With timestamps, migrations can be applied in the order in which they were created, which helps to maintain the integrity of the database. 
+	Instead of using integers to identify versions of the delta file, timestamps can significantly reduce the likelihood of conflicts. In addition, with timestamps, migrations can be applied in the order in which they were created, which helps to maintain the integrity of the database. 
 
 	\begin{lstlisting}[caption=Timestamps]
 		V2022-12-25-14-52__first_change.sql
@@ -111,18 +110,17 @@ Regardless of what strategy or tools a developer needs, there are certain best p
 		V2022-12-28-16-32__third_change.sql
 	\end{lstlisting}
 
-	This improves the handling of branches, because with this naming the scripts are automatically sorted by date. But if a branch containing an older migration script is merged into the main branch before a branch containing a newer script, for example Flyway will ignore the older script by default. Flyway will consider the migration script in purple Branch \#2 to be outdated when it is merged. This is true regardless of whether the version numbers are timestamps or integers. To prevent this issue, you can enable the out-of-order migrations setting in Flyway, which will allow it to apply migration scripts in any order. 
+	This convention improves the handling of branches because, with this naming, the scripts are automatically sorted by date. However, if a branch containing an older migration script is merged into the main branch before a branch containing a newer script, for example, Flyway will ignore the older script by default. Flyway will consider the migration script in purple Branch \#2 to be outdated when merged. This is true regardless of whether the version numbers are timestamps or integers. To prevent this issue, enable the out-of-order migrations setting in Flyway, allowing it to apply migration scripts in any order.  
+	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.95\textwidth]{./chapters/introduction/images/Branching-Flyway-Branch.png}
 		\caption[Branching with Flyway - Source: \cite{Lukonin2017}]{Branching with Flyway}
 		\label{fig:flyway_branching}
 	\end{figure}
-
-	
 	
 	\item Make sure to track all database changes\\
-	Everyone should be able to see the latest change and history
+	Everyone should be able to see the latest change and history.
 	\item Store current schema version number in database\\
 	To check weather the most recent version is deployed.
 	\item Test changes\\
