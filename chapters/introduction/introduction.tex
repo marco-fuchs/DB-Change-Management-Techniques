@@ -14,7 +14,7 @@ In addition, no one may know how the test database differs from the production d
  
 For that reason, migrations are best done automatically to avoid downtime or errors. In addition, proper database change management ensures that changes to a database are controlled and safe. According to \cite{ManageForce2016}, 80\% of unplanned database downtime is due to database changes.
 Developers need an excellent strategy for how to apply changes to the same database environment.
-This problem requires a best practices strategy for dealing with different users, branches and applications. Using a proper management system can prevent a developer from running into a very annoying \textit{Column not found} error.
+This problem requires a best practices strategy for dealing with different users, branches and applications. It can quickly happen that when a change in the code results in a change in the database, the migration of the database is subsequently forgotten. Using a proper management system can prevent a developer from running into such errors where a database migration has been forgotten for example a very annoying \textit{Column not found} error.
 
 \marginpar{SQL DDL/DML\ \cite{Fritchey2011}}%
 However, why not just use SQL \gls{DDL}/\gls{DML} as a source for change management? SQL DDL and DML statements are used to create, modify, and query the structure and data of a database, respectively. While these statements can be used to make changes to a database, they are not suited for change management in the broader sense.
@@ -58,9 +58,8 @@ In most organizations, the way in which database changes are handled is differen
 	
 	\item \textit{Database and application changes have a different deployment process}\\
 	Software developers use continuous delivery to manage their deployment of the software. The demand for techniques that support these agile processes is desired in a modern agile environment. Many teams use similar techniques regarding database change management and add their database changes as scripts in version control tools in a separate pipeline. Most developers know how to use software development tools very well and can apply these version control techniques to their database environment. However, if a database has an encapsulated pipeline to the application, the application development team and the administrator must keep it synchronized. As a result, agile delivery processes become slowed down by database deployment and synchronization with the application.
-	
-	\todo{Whats DBA?, add to glossary}
-	Team members, including DBAs, need to see how changes are progressing to know what changes are planned, how their testing is going, and which schema changes have been implemented in production databases.
+
+	Team members, including \gls{DBA}, need to see how changes are progressing to know what changes are planned, how their testing is going, and which schema changes have been implemented in production databases.
 	
 	\item \textit{Database and application share a deployment process}
 	According to  \cite{GoogleDevOps2022}, this is the best pratice method which can be achieved by this:
@@ -76,15 +75,10 @@ In most organizations, the way in which database changes are handled is differen
 \marginpar{Multiple Environments \cite{Lukonin2017}}%
 In many cases, three instances of the database are needed in parallel. One database for development is located locally with each developer. The second database is for testing purposes before deploying, and the third is the production database. Therefore, each developer should use his/her local database copy and branch.
 
-Migration tools like Flyway or Liquibase can be used in these three environments. They allow local integration and use and integration into the CI pipeline in which the test database is used. Change management tools can also be integrated into the production environment, for example, in the cloud. 
-
-\todo{"migrate" other times with textit? consitency}
-\todo{Flyway specific paragraph in general chapter? Maybe move chapters?}
-Using multiple environments with Flyway is possible because Flyway is a thread-safe tool that can manage database migrations in environments with multiple instances of an application running simultaneously. Each instance will run the Flyway "migrate" command and apply the necessary migrations to the database. Flyway locks the SCHEMA\_VERSION table during each migration to prevent conflicts or duplicate migrations. This means other instances will wait until the current migration is completed before proceeding. Multiple instances of Flyway can grab different migrations and apply them in the order defined by their version numbers. However, if multiple application instances are initialized simultaneously during the initial deployment, and the SCHEMA\_VERSION table does not yet exist, there is a risk of failure. To prevent this, run Flyway manually from the command line when deploying for the first time, create the SCHEMA\_VERSION table in advance, or start the second and subsequent application instances with a delay to allow the first instance enough time to create the table.
+Migration tools like Flyway or Liquibase can be used in these three environments. They allow local integration and use and integration into the CI pipeline in which the test database is used. Change management tools can also be integrated into the production environment, for example, in the cloud. The user can test the migrations directly locally. When it comes to deployment, a test can be performed automatically, for example on the test database. If this test is successful, the changes are only applied to the production database.
 
 \subsection{Best Practices for database migrations \label{best_practices}}%
 \marginpar{Best practices methods  \cite{Parsick2018}, \cite{F5works2017}, \cite{Langan2022}, \cite{Heppell2021}, \cite{Lukonin2017}}%
-
 Specific best practices simplify dealing with database changes regardless of what strategy or tools a developer needs.
 
 \begin{itemize}
@@ -129,40 +123,52 @@ Specific best practices simplify dealing with database changes regardless of wha
 \end{itemize}
 
 
-
+\newpage
 \section{Available Tools}%
-This section will provide an overview of available change management tools.
+This section gives a non holistic excerpt about possible database change tools.
 %The list of tools should include the available programming languages, price / availability
 %and the main advantage over their competitors.
 
-\begin{table}[h]
+\begin{table}[H]
 	\centering
-	\begin{tabularx}{8cm}{X|c|l}
-		Name & Language & Pricing \\ \hline
-		Flyway & independent\\
-		Liquibase & independent\\
+	\ra{1.3}
+	\begin{tabularx}{10cm}{X l l}
+		\toprule
+		Name & Language \\ 
+		\midrule
+		Flyway & independent \\
+		Liquibase & independent \\
 		migrate & Go  \\
 		Active Record Migrations & Ruby on Rails \\
 		alembic & Python \\
 		dbup & .NET \\
+		Visual Studio - SQL Server Data Tools & \\
 		Entity Framework Migrations & .NET \\
 		Laravel Migrations & PHP \\
-		\href{https://ollycope.com/software/yoyo/latest/}{Yoyo} &  \\
-		\href{https://book.cakephp.org/phinx/0/en/migrations.html}{Phinx} &  \\
-		\href{https://www.dbmaestro.com/for-devops}{DBmaestro} &  \\
-		\href{https://docs.djangoproject.com/en/1.11/topics/migrations/}{Django} & Python \\
-		\href{http://dbdeploy.com}{DBdeploy} & PHP \\
+		dbForge Source Control & \\
+		Yoyo &  Python\\
+		Phinx & PHP\\
+		Source Control for Oracle & \\
+		DBmaestro &  \\
+		Django & Python \\
+		DBdeploy & PHP \\
+		FluentMigrator & .Net, C\#\\
+		DBGeni & \\
+		DB Ghost Change Manager & \\
+		Version SQL & \\
+		Sqitch & \\
+		Idera DB Change Manager & \\
+	\bottomrule
 	\end{tabularx}
-	\caption{Available migration tools - Based on \cite{}}
+	\caption{Available migration tools - Based on \cite{GoogleCloudTools, DBMSTools}}
 	\label{tab:migration_tools}
 \end{table}
 
+There are tools for different programming languages and in different qualities. These range from shell script-like repositories to enterprise solutions. In this work, however, only the two tools Flyway and Liquibase are examined and tested.
 
-\todo{\url{https://www.quora.com/What-are-the-alternatives-to-LiquiBase}}
+
 
 
 \section{Overview}%
 This section will provide an overview of thesis.
 
-
-\newpage

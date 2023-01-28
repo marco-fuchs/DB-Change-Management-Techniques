@@ -34,48 +34,51 @@ LiquiBase integration is highly promising due to the clever combination of its p
 \textbf{Functionalities}\\
 In the table x you can see that Liquibase has more functionalities in the ratio 16/9. 
 
+
+
 \begin{table}[H]
 	\centering
+	\ra{1.2}
 	\begin{tabularx}{10cm}{X c c}
-			\rowcolor{black}
-		\textcolor{white}{Function}  & 	\textcolor{white}{Flyway} & \textcolor{white}{Liquibase} \\
-		\rowcolor{lightgray}
-		Migration & +++ & +++ \\ \rowcolor{lightgray}
-		& \package{migrate} & \package{update} \\ 
+		\toprule
+		Function  & 	Flyway & Liquibase \\
+		\midrule
+		Migration & +++ & +++ \\
+		& \package{migrate} & \package{update} \\ \hline
 		
 		Rollback & - & ++ \\
-		& \package{undo} (pro version) & \package{rollback} \\ 	\rowcolor{lightgray}
+		& \package{undo} (pro version) & \package{rollback} \\ \hline
 		
-		Clear schema & + & + \\ 	\rowcolor{lightgray}
-		& \package{clean} & \package{dropAll} \\
+		Clear schema & + & + \\
+		& \package{clean} & \package{dropAll} \\ \hline
 		
 		Documentation & + & ++ \\
-		& \package{info} & \package{DBDoc} \\ 	\rowcolor{lightgray}
+		& \package{info} & \package{DBDoc} \\ \hline
 		
-		Comparison & - & ++ \\ 	\rowcolor{lightgray}
-		&  & \package{Diff} \\
+		Comparison & - & ++ \\
+		&  & \package{Diff} \\ \hline
 		
 		Validation & + & - \\
-		& \package{validate} & \\ \rowcolor{lightgray}
+		& \package{validate} & \\ \hline
 		
-		Initialization & + & - \\ \rowcolor{lightgray}
-		& \package{baseline} & \\
+		Initialization & + & - \\
+		& \package{baseline} & \\ \hline
 		
 		Maintenance & + & + \\
-		& \package{repair} & \package{clearChecksums} \\ \rowcolor{lightgray}
+		& \package{repair} & \package{clearChecksums} \\ \hline
 		
-		Callbacks & + & -\\ \rowcolor{lightgray}
-		& & \\
+		Callbacks & + & -\\
+		& & \\ \hline
 		
 		Preconditions & - & + \\
-		& & \\ \rowcolor{lightgray}
+		& & \\ \hline
 		
-		Context & - & ++ \\ \rowcolor{lightgray}
-		& & \\
+		Context & - & ++ \\ 
+		& & \\ \hline
 		
 		Refactoring & - & ++ \\
 		& & \\
-		
+		\bottomrule
 	\end{tabularx}
 	\caption{Functionalities Flyway vs. Liquibase - Based on \cite{Zylinski2022}}
 	\label{tab:functionalities_flyway_liquibase}
@@ -88,7 +91,7 @@ In the table x you can see that Liquibase has more functionalities in the ratio 
 \begin{table}[H]
 	\centering
 		    \begin{tabular}{|l|p{.45\textwidth}|p{.45\textwidth}|}
-		    \toprule
+		    \hline
 			 & Liquibase & Flyway\\ \hline
 			 \begin{turn}{-90}Advantages\end{turn} &
 			\begin{itemize}
@@ -101,9 +104,8 @@ In the table x you can see that Liquibase has more functionalities in the ratio 
 			\end{itemize} & \begin{itemize}
 				\item Very easy and intuitive to use
 				\item Direct use of SQL files
-				\item Multiple schema support (?)
+				\item Multiple schema support
 				\item Clean existing schema
-				\item Generates SQL for you (?)
 			\end{itemize}\\ \hline
 		
 	 \begin{turn}{-90}Disadvantages\end{turn} &
@@ -112,15 +114,15 @@ In the table x you can see that Liquibase has more functionalities in the ratio 
 			\item No direct support for Java migrations
 		\end{itemize} & \begin{itemize}
 			\item Important features like Undo or Dry-Run are not included in the free version 
-			\item No support for older Java version such as Java 6 \& 7 (enterprise only) (todo: true?)
+			\item No support for older Java version such as Java 6 \& 7 (enterprise only)
 			\item Versioning system with linear naming convention makes it hard to manage the order of changes
 		\end{itemize}\\ \hline
 		\end{tabular}
-	\caption{Flyway vs Liquibase comparison - Based on \cite{Parsick2018}, \cite{Kaps2016}}
+	\caption{Flyway vs Liquibase comparison - Based on \cite{Parsick2018, Kaps2016}}
 	\label{tab:flyway_liquivase_conparison}
 \end{table}
 
-
+\newpage
 \section{When to use which?}
 
 \marginpar{Question for Selection\\ \cite{Zylinski2022}, \cite{LiquibaseVSFlyway}}%
@@ -144,7 +146,6 @@ Since Liquibase is an American company, it provides information in English only.
 
 \textit{Do you want to support diverse DBMS?}\\
 Liquibase allows you to use XML, YAML, or JSON to define your database changes, providing an abstraction layer that makes it better suited for use in software products that may be installed in different environments with different underlying database technologies. With Flyway one writes the migrations directly in the SQL language of the used database, therefore with flyway you would have to rewrite the scripts for another database. Probably a lot can be taken over, but there is no guarantee what ends in a manual additional effort.
-\vspace{0.5cm}
 
 \textit{Are there many different environments with different database schema requirements?}\\
 If this is a requirement, Liquibase is the tool of choice because one can selectively deploy changes as needed to different environments. 
