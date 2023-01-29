@@ -43,7 +43,7 @@ Tags on StackOverflow: 3,530 (27. December 2022)\\
 
 \section{Functionality}
 \marginpar{Organisation \cite{Liquibase}}%
-Liquibase uses a changelog file to list database changes sequentially. Each change is defined in the changeset format and contains change types, which specify the operations to apply.
+Liquibase uses a changelog file to list database changes sequentially. Each change is defined in the changeset format and contains change types, which specify the operations to apply. Figure \ref{fig:IntroductionToLiquibase:LiquibaseChangelogStructure} shows this structure. Next to the changelog file is a property file, which specifies the database connection and additional parameters.
 
 \begin{figure}[H]
 	\centering
@@ -52,14 +52,94 @@ Liquibase uses a changelog file to list database changes sequentially. Each chan
 	\label{fig:IntroductionToLiquibase:LiquibaseChangelogStructure}
 \end{figure}
 
+The workflow of Liquibase is shown in Figure \ref{fig:IntroductionToLiquibase:Workflow}. The workflow consists of creating changesets and adding them to the changelog file. Followed by the application of the update to the database. 
 
-\section{Main Commands}
+\marginpar{Workflow \cite{Liquibase}}%
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.95\textwidth]{./chapters/intro_liquibase/images/how-liquibase-works-general.jpg}
+	\caption[Liquibase Workflow - Source: \cite{Liquibase}]{Liquibase Workflow}
+	\label{fig:IntroductionToLiquibase:Workflow}
+\end{figure}
+
+The database changelog and database changeloglock table are created together with the first migration. The changelog table tracks deployed changes and ensure that only new changes are deployed.
+The database changelog lock table prevents multiple instances of Liquibase updating the database.
+
+\marginpar{Formats \cite{LiquibaseBlogXML}}%
+Liquibase allows the definition of changesets in four different formats. They can either be written in SQL or XML, YAML and JSON. In comparison, the latter provides much more flexibility and features than SQL. Liquibase emphasizes the use of XML, YAML or JSON format for changelog files. As stated in their blog: "The magic happens when you use XML" \cite{LiquibaseBlogXML}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.65\textwidth]{./chapters/intro_liquibase/images/xml-magic.png}
+	\caption[Liquibase, The Magic Happens when you use XML - Source: \cite{LiquibaseBlogXML}]{Liquibase, The Magic Happens when you use XML}
+	\label{fig:IntroductionToLiquibase:Magic}
+\end{figure}
+
+By using the database-agnostic way of defining the changeset you gain the benefits of auto rollback, powerful change types, cross-platform compatibility and easy unit testing. The use of agnostic formats does not limit the use of \gls{SQL} changesets. Both can be used simultaneously. Using agnostic format for the majority of changes and use platform specific \gls{SQL} for the rest.
+
+
+\section{Main Commands \cite{Liquibase}}
+Liquibase categorizes the commands into six types: update, rollback, snapshot, diff, status and utility. The following paragraph provide a short description of each type.
+
+\textbf{Update}\\
+\marginpar{Update}%
+The update command type includes a variety of commands to update the changes to the database. Important commands are update-count and validate. Update-count applies the next number of changesets indicated by the count variable. This function gives a lot of control. Validate checks the changelog for errors and is useful for debugging.
+
+\textbf{Rollback}\\
+\marginpar{Rollback}%
+The rollback command type includes all commands to rollback applied changes to the database. The main command used is the rollback-count, which roll-backs the specified amount of changesets.
+
+\textbf{Snapshot}\\
+\marginpar{Snapshot}%
+The snapshot command gathers the current database schema and compiles the results into \gls{CLI} or into a JSON file.
+
+\textbf{Diff}\\
+\marginpar{Diff}%
+The diff command type allows different methods to compare two databases and even generate a changelog file which contains all differences as changesets.
+
+\textbf{Status}\\
+\marginpar{Satus}%
+The status command lists all changesets that are not applied to the database. Useful for keeping track of deployed changes.
+
 
 \section{Installation and Setup}
-\todo{updateSQL}
-Die Funktion updateSQL von LiquiBase
-Ermöglicht, die anstehende Migration zunächst als SQL-Befehle auszugeben, z.B. zu Review- Zwecken.
-Ist bei Flyway nicht relevant, da Plain-SQL-Skripte verwendet werden
+\marginpar{Installation \cite{Liquibase}}%
+Liquibase provides an easy installation process on Windows, macOS and Linux.
+
+\begin{minipage}[t]{0.5\textwidth}
+	\textbf{Liquibase Clients}	
+	\begin{itemize}
+		\item \Gls{CLI}
+		\item \gls{JAVAg} \acrshort{API}
+	\end{itemize}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+	\textbf{Third Party Plugins}
+	\begin{itemize}
+		\item Ant
+		\item Maven
+		\item Spring Boot.
+	\end{itemize}
+\end{minipage}
+\vspace{0.3cm}
+
+\marginpar{Setup \cite{Liquibase}}%
+For the purpose of this seminar Liquibase was used through the \gls{CLI}. Setup a project with the following command: 
+
+\begin{lstlisting}[language=bash]
+liquibase init project
+--project-dir=[path/to/some/directory]
+--changelog-file=[file.ext]
+--format=[sql|xml|json|yaml|yml]
+--project-defaults-file=[liquibase.properties]
+--url=[some/JDBC/URL]
+--username=[string]
+--password=[string]
+\end{lstlisting}
+
+Two separate projects were created for this seminar. One using YAML format and one using \gls{SQL} format otherwise identical.
+
+\section{Best Practices}
 
 
 \newpage
