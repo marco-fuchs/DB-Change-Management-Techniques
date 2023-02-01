@@ -88,7 +88,7 @@ ALTER COLUMN private_email TYPE VARCHAR(100) USING private_email::varchar;
 
 
 \marginpar{Rename a table and change related view}%
-The last migration is to change a related view after renaming a table\\
+The next migration is to change a related view after renaming a table\\
 \texttt{V7\_\_change\_attribute\_type.sql} was applied with flyway migrate:
 \begin{lstlisting}[language=SQL]
 ALTER TABLE customer RENAME TO clients;
@@ -197,7 +197,11 @@ mvn flyway:migrate
 
 \newpage
 \section{Liquibase Scenarios}
+\subsection{SQL-Changelog}
+\marginpar{SQL-Changelog}%
 
+\subsection{YAML-Changelog}
+\marginpar{YAML-Changelog}%
 
 
 \newpage

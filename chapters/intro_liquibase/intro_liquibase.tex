@@ -140,6 +140,42 @@ liquibase init project
 Two separate projects were created for this seminar. One using YAML format and one using \gls{SQL} format otherwise identical.
 
 \section{Best Practices}
+\marginpar{Best Practices \cite{Liquibase}}%
+The Liquibase best practices section covers multiple aspects of using Liqibase. The following paragraphs cover the primary practices. Generally speaking, it is crucial to define and agree on best practices as a whole team.
 
+\textbf{Directory Structure}\\
+\marginpar{Directory Structure \cite{Liquibase}}%
+Figure \ref{fig:IntroductionToLiquibase:BestPrac} shows the proposed directory structure from Liquibase. Liquibase suggests organizing changelog files by significant releases. The changelog file Liquibase uses is the changelog-root file. The file then includes all other changelog release files to operate.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.65\textwidth]{./chapters/intro_liquibase/images/directory_structure.png}
+	\caption[Liquibase, Best Practices on Directory Structure - Source: \cite{Liquibase}]{Liquibase, Best Practices on Directory Structure}
+	\label{fig:IntroductionToLiquibase:BestPrac}
+\end{figure}
+
+\textbf{One Changeset per Change}\\
+\marginpar{One Changeset per Change \cite{Liquibase}}%
+Only define on change per changeset. This practice makes the change atomic within a single transaction. A changeset can either succeed or fail. A failed changeset containing multiple changes can leave the database in a partially deployed state.
+
+\textbf{Rollback Strategy}\\
+\marginpar{Rollback Strategy \cite{Liquibase}}%
+Use the format-specific rollback mechanism to define rollbacks explicitly. It is essential to test the defined rollbacks in the early stages. For safety test rollbacks in the development environment.
+
+\textbf{Documentation}\\
+\marginpar{Documentation \cite{Liquibase}}%
+Document unclear of complicated changesets.
+
+\section{Workflow}
+\marginpar{Workflow}%
+The following list depicts the workflow presented by Liquibase \cite{Liquibase}. 
+
+\begin{enumerate}
+	\item Use your favourite IDE or editor to create a local changeset that contains the change.
+	\item Enter \texttt{liquibase update} to run an update with the new changeset.
+	\item Make the corresponding changes in the application code.
+	\item Test the new application code together with the database change.
+	\item Commit both the changeset and the application code to source control.
+\end{enumerate}
 
 \newpage
