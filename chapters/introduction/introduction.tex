@@ -24,6 +24,9 @@ Change management refers to tracking, reviewing, approving, and implementing cha
 Database change management systems are designed to support this process by providing a framework for managing and automating the entire change management process. These systems typically include features such as version control, change tracking, approval workflows, and rollback capabilities, which make it easier to manage and coordinate changes to a database.
 
 Using a database change management system can help ensure that changes to a database are made controlled and consistently, reducing the risk of errors and downtime. It can also improve collaboration and communication among team members and make it easier to audit and document changes to the database.
+
+The article \cite{Prochazka2022} explains a technique for "branching" a database in PostgreSQL using the \texttt{CREATE DATABASE} command. The idea is to create a backup of the database before making changes to the schema that may not be backward compatible. If the changes are complete successful, the backup can be deleted. If the changes do not complete, the backup can be restored. This technique requires a bit of discipline, but is quick and easy compared to other alternatives such as copy and paste in the file system or dump and restore. This provides a workaround for a database rollback, but does not solve other problems with database migration stated below.
+
  
 \marginpar{Benefits}%
 With the problems and shortcomings mentioned above, it is beneficial to implement certain automatism or use so-called change management tools in the deployment pipeline.
@@ -43,8 +46,8 @@ With the problems and shortcomings mentioned above, it is beneficial to implemen
 
 Furthermore, migration can be used as the single source of truth for the actual production schemas. This becomes very handy once multiple database environments are updated with different deployment states.
 
-\marginpar{Context}%
-This seminar thesis focuses on database migrations in the context of schema migrations.  Other database migrations, such as moving a database to a different platform or a cloud, are not considered in the context of this work.
+%\marginpar{Context}%
+%This seminar thesis focuses on database migrations in the context of schema migrations.  Other database migrations, such as moving a database to a different platform or a cloud, are not considered in the context of this work.
 
 \newpage
 \section{State of the Art}%
@@ -158,6 +161,8 @@ This section gives a non holistic excerpt about possible database change tools.
 		Version SQL & \\
 		Sqitch & \\
 		Idera DB Change Manager & \\
+		Monjam & MongoDB migration\\
+		Mongock & NoSQL Databases\\
 	\bottomrule
 	\end{tabularx}
 	\caption{Available migration tools - Based on \cite{GoogleCloudTools, DBMSTools}}
@@ -169,6 +174,6 @@ There are tools for different programming languages and in different qualities. 
 
 
 
-\section{Overview}%
-This section will provide an overview of thesis.
+%\section{Overview}%
+%This section will provide an overview of thesis.
 
