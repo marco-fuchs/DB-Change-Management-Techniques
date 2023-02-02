@@ -36,7 +36,7 @@ Additionally, Liquibase works with over 50 databases categorized on different ve
 
 \marginpar{Pricing and Editions \cite{Liquibase}}%
 Liquibase \cite{Liquibase} comes in three editions with different pricing: Free, Pro and Enterprise. Each edition adds more functionality than the preceding. However, the free, open-source version provides all the core functionalities needed. The Pro and Enterprise version targets larger teams with ten or more members. 
-
+\newpage
 \marginpar{Community}%
 Stars on GitHub: 3'600 (27. December 2022)\\
 Tags on StackOverflow: 3,530 (27. December 2022)\\
@@ -78,27 +78,27 @@ Liquibase allows the definition of changesets in four different formats. They ca
 By using the database-agnostic way of defining the changeset you gain the benefits of auto rollback, powerful change types, cross-platform compatibility and easy unit testing. The use of agnostic formats does not limit the use of \gls{SQL} changesets. Both can be used simultaneously. Using agnostic format for the majority of changes and use platform specific \gls{SQL} for the rest.
 
 
-\section{Main Commands \cite{Liquibase}}
+\section{Main Commands}
 Liquibase categorizes the commands into six types: update, rollback, snapshot, diff, status and utility. The following paragraph provide a short description of each type.
 
 \textbf{Update}\\
-\marginpar{Update}%
+\marginpar{Update \cite{Liquibase}}%
 The update command type includes a variety of commands to update the changes to the database. Important commands are update-count and validate. Update-count applies the next number of changesets indicated by the count variable. This function gives a lot of control. Validate checks the changelog for errors and is useful for debugging.
 
 \textbf{Rollback}\\
-\marginpar{Rollback}%
+\marginpar{Rollback \cite{Liquibase}}%
 The rollback command type includes all commands to rollback applied changes to the database. The main command used is the rollback-count, which roll-backs the specified amount of changesets.
 
 \textbf{Snapshot}\\
-\marginpar{Snapshot}%
+\marginpar{Snapshot \cite{Liquibase}}%
 The snapshot command gathers the current database schema and compiles the results into \gls{CLI} or into a JSON file.
 
 \textbf{Diff}\\
-\marginpar{Diff}%
+\marginpar{Diff \cite{Liquibase}}%
 The diff command type allows different methods to compare two databases and even generate a changelog file which contains all differences as changesets.
 
 \textbf{Status}\\
-\marginpar{Satus}%
+\marginpar{Satus \cite{Liquibase}}%
 The status command lists all changesets that are not applied to the database. Useful for keeping track of deployed changes.
 
 
