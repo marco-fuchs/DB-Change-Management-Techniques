@@ -25,7 +25,7 @@ The search queries on Google also show that both receive a similar number of req
 \end{figure}
 
 
-\textbf{Integration into existing projects}\\
+\textbf{Integration into Existing Projects}\\
 In order to be able to integrate existing projects with Flyway, one has to create a manual dump (DDL) of the production database as version 1 script, first clean and empty all other databases and migrate to version 1. Alternatively, one can manually bring the other databases to the state of the production database and set the state as version 1 using the baseline command.
 
 On the other hand, Liquibase works the following. To tag the state of the production database as version 1, use the \package{generateChangelog} command. To compare the production database with other environments, use the diff command and generate changelogs for any differences. 

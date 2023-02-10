@@ -1,24 +1,18 @@
+% !TeX spellcheck = en_GB
 %\cleardoublepage
 \markleft{\abstractname}
 \pdfbookmark[1]{Abstract}{abstract}
 
 \chapter*{Abstract}
 \marginpar{Introduction}%
-The abstract gives a concise overview of the work you have done. The reader shall be able to decide whether the work which has been done is interesting for him by reading the abstract. Provide a brief account on the following questions:
+This project investigates and compares two commonly used database change management tools: Flyway and Liquibase. Sooner or later, all database systems must adapt their schema design, which is best done automatically to avoid long downtimes. However, this DevOps of databases or DataOps is often forgotten and creates a development gap. 
 
-\begin{itemize}
-	\item What is the problem you worked on? (Introduction)
-	\item How did you tackle the problem? (Materials and Methods)
-	\item What were your results and findings? (Results)
-	\item Why are your findings significant? (Conclusion)
-\end{itemize}
-
-The abstract should approximately cover half of a page, and does generally not contain citations.
- 
 \marginpar{Methods}%
-\lipsum[1]
+A literature review of database change management techniques was conducted. Furthermore, the tools Flyway and Liquibase were compared to each other by implementing six different change scenarios.
 
+\marginpar{Results}%
+The analysis shows that both tools provide the basic functionality needed for database change management. The main difference is that Flyway integrates changes by taking SQL files as input, while Liquibase needs a changelog file with defined change types.
 
-\marginpar{Conclusion}%
-\lipsum[1]
+\marginpar{Discussion}%
+We cannot conclude that one tool is better than the other. Moreover, each tool has its strengths and shortcomings. Therefore, the choice of tool boils down to the team's individual needs and the database system's requirements.
 

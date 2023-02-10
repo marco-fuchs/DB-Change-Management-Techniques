@@ -2,7 +2,60 @@
 
 \chapter{Possible MSE Data Engineering Exercise}
 
-\section{Task}
+\section{Exercise: Database Change Management}
+Goal of this exercise define and push different changes on the Pagila database using Liquibase.
 
-\section{Sample Solution}
+\subsection*{Task 1}
+\marginpar{Task 1}
+Setup the Pagila database and install Liquibase onto your system using following links. Additionally, initialise a project and create a SQL changelog file.
+
+Pagila database: \url{https://github.com/devrimgunduz/pagila}
+
+Liquibase: \url{https://docs.liquibase.com/start/install/home.html}
+
+Tip: Use the command \texttt{liquibase} to see all available commands.
+
+\subsection*{Task 2}
+\marginpar{Task 2}%
+Define a changeset in the changelog file that renames the column "email" to "private\_email" in the customer table. The changeset should include the change and a corresponding rollback statement. Update the database and test the rollback. Use the \texttt{update} and \texttt{rollback} command.
+
+\subsection*{Task 3}
+\marginpar{Task 3}%
+Setup a second project and use a database agnostic format for the changelog file like XML, JSON or YAML. Make sure to rollback any changes before working with the new changelog. Reimplement Task 2 using the new format. 
+
+Available change types: \url{https://docs.liquibase.com/change-types/home.html}
+
+
+\section{Solution}
+
+\subsection*{Task 2}
+\marginpar{Solution Task 2}%
+Define the change using sql and the changeset format provided by Liquibase. SQL changelog cannot perform auto rollbacks and need to be defined by the user.
+
+\begin{lstlisting}[language=SQL, caption={Sample Solution Task 2}]
+	--changeset StudentName:1 labels:Task2 
+	--comment: Task 2, Renaming an Attribute
+	
+	ALTER TABLE customer RENAME COLUMN email TO private_email;
+	
+	--rollback ALTER TABLE customer RENAME COLUMN private_email TO email;
+\end{lstlisting}
+
+\subsection*{Task 3}
+\marginpar{Solution Task 3}%
+Liquibase provides a change type that is able to rename columns. The change type comes with auto rollback 
+
+\begin{lstlisting}[language=SQL, caption={Sample Solution Task 3}]
+	- changeSet:  
+		id:  1  
+		author:  StudentName  
+		changes:  
+		-  renameColumn:  
+			catalogName:  customer  
+			columnDataType:  text  
+			newColumnName:  private_email  
+			oldColumnName:  email  
+			schemaName:  public  
+			tableName:  customer
+\end{lstlisting}
 
