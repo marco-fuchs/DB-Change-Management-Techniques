@@ -3,8 +3,25 @@
 
 
 \chapter{Introduction}
+\marginpar{Introduction}%
+Database change management is the process of tracking, reviewing and approving changes to a database in a controlled and organized manner. It is an essential aspect of "modern" database administration and helps to ensure that changes to the database are made in a consistent, reliable and reversible way. The database change management process is similar to "modern" software development and benefits from established agile processes and tools.
+
+Several techniques can be used to manage database changes effectively. These include
+
+\begin{itemize}
+	\item Version control: Using version control software like Git or Subversion to track changes to database schema and data. Version control allows for an easy rollback of changes and the ability to compare and merge different versions of the database.
+	
+	\item Change request process: Establish a process for requesting and reviewing database changes, such as using a change request form or a change management database. This process helps ensure that all changes are properly documented and reviewed before implementation.
+	
+	\item Test: Thoroughly test changes to the database, either manually or through automated testing tools, to ensure that they do not adversely affect the database or its performance.
+	
+	\item Documentation: Maintaining comprehensive documentation of database changes, including details such as the reason for the change, the impact, and any associated risks.
+	
+\end{itemize}
+
+Database change management is necessary to minimize the risk of data loss or corruption and to maintain the integrity and reliability of the data stored in the database. In addition, it helps to standardize the process of making changes to the database, keep track of all changes made, and revert to a previous version if necessary, making it easier to manage the database over time and reducing the likelihood of errors or conflicts arising from manual changes.
+
 \section{Problem Statement and Benefits}%
- 
  \marginpar{Motivation\\ \cite{techopedia2022}, \cite{Choudhry2018}, \cite{Parsick2018}}%
  In the last 20 years, agile approaches have spread in their popularity. One principle of agile methods is how to deal with change. This has changed massively compared to previous, not agile methods. For example, in agile development, changes are allowed even in the late stages of the project. However, the database community has traditionally considered database design to be something that is planned.
  
