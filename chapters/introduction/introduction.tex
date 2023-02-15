@@ -81,21 +81,32 @@ In most organizations, the way in which database changes are handled is differen
 
 	Team members, including \gls{DBA}, need to see how changes are progressing to know what changes are planned, how their testing is going, and which schema changes have been implemented in production databases.
 	
-	\item \textit{Database and application share a deployment process}
+	\item \textit{Database and application share a deployment process}\\
 	According to  \cite{GoogleDevOps2022}, this is the best pratice method which can be achieved by this:
 	\begin{itemize}
 		\item Keeping all database schema changes in version control, together with the application code the schema belongs to
 		\item Using a tool that records which changes have been run against which environments, and what the results were.
 	\end{itemize}
 	These practices also ensure that there is a canonical source of truth for all changes and make the change history easily accessible for auditing purposes.
-
 \end{enumerate}
+
+
 
 \subsection{Deployment Workflows}
 \marginpar{Multiple Environments \cite{Lukonin2017}}%
 In many cases, three instances of the database are needed in parallel. One database for development is located locally with each developer. The second database is for testing purposes before deploying, and the third is the production database. Therefore, each developer should use his/her local database copy and branch.
 
 Migration tools like Flyway or Liquibase can be used in these three environments. They allow local integration and use and integration into the CI pipeline in which the test database is used. Change management tools can also be integrated into the production environment, for example, in the cloud. The user can test the migrations directly locally. When it comes to deployment, a test can be performed automatically, for example on the test database. If this test is successful, the changes are only applied to the production database.
+
+\marginpar{Configuration categories}%
+
+There are several ways to evaluate the changes in the database. In different environments the following formats can occur:
+\begin{itemize}
+	\item Source code supplemented with a comment ("DocString") if necessary.
+	\item Separate language (e.g. a changelog, YAML, JSON, XML)
+	\item DB schema in SQL, SQL Standard or SQL dialect (e.g. PostgreSQL)
+\end{itemize}
+
 
 \subsection{Best Practices for Database Migrations \label{best_practices}}%
 \marginpar{Best practices methods  \cite{Parsick2018}, \cite{F5works2017}, \cite{Langan2022}, \cite{Heppell2021}, \cite{Lukonin2017}}%
@@ -152,35 +163,71 @@ This section gives a non holistic excerpt about possible database change tools.
 \begin{table}[H]
 	\centering
 	\ra{1.3}
-	\begin{tabularx}{10cm}{X l l}
+	\begin{tabularx}{15cm}{p{3cm} p{3cm} p{2cm} l l p{2cm} }
 		\toprule
-		Name & Language \\ 
+		Name & Configuration & Supported DB  & Language & License\\ 
 		\midrule
-		Flyway & independent \\
-		Liquibase & independent \\
-		migrate & Go  \\
-		Active Record Migrations & Ruby on Rails \\
-		alembic & Python \\
-		dbup & .NET \\
-		Visual Studio - SQL Server Data Tools & \\
-		Entity Framework Migrations & .NET \\
-		Laravel Migrations & PHP \\
-		dbForge Source Control & \\
-		Yoyo &  Python\\
-		Phinx & PHP\\
-		Source Control for Oracle & \\
-		DBmaestro &  \\
-		Django & Python \\
-		DBdeploy & PHP \\
-		FluentMigrator & .Net, C\#\\
-		DBGeni & \\
-		DB Ghost Change Manager & \\
-		Version SQL & \\
-		Sqitch & \\
-		Idera DB Change Manager & \\
-		Monjam & MongoDB migration\\
-		Mongock & NoSQL Databases\\
-	\bottomrule
+		Flyway & SQL (standard) & RDBMS & Java & Freemium \\
+		Liquibase & Changelog & RDBMS, NoSql & Java & Freemium \\
+		migrate & Changelog & RDBMS, NoSql &  Go & MIT\\
+		Active Record Migrations & Ruby DSL & RDBMS & Ruby on Rails & MIT\\
+		alembic & ORM & RDBMS & Python &  MIT \\
+		dbup & SQL (standard) & RDMBS& .NET & MIT\\
+		VS SQL Server Data Tools & SQL & RDBMS, \gls{AS}, \gls{IS}, \gls{RS} & C\#, Visual Basic & MIT \\
+		Entity Framework Migrations & ORM & RDMBS & .NET & MIT \\
+		Laravel Migrations & ORM & RDMBS & PHP & MIT \\
+		dbForge Source Control & SQL/UI & SQL Server & Paid\\
+		Yoyo & SQL (inline Python) & RDBMS & Python & Apache 2.0\\
+		Phinx & ORM/SQL & RDBMS &  PHP & MIT\\
+		Source Control for Oracle & SQL & RDBMS & Java & Paid\\
+		DBmaestro & SQL/UI & RDBMS & & Paid\\
+		Django & ORM & RDBMS& Python& BSD-3-Clause\\
+		DBdeploy & SQL & RDBMS & PHP/.NET/Java & LGPL-3.0\\
+		FluentMigrator & ORM &RDBMS& .Net, C\# & Apache 2.0\\
+%		DBGeni & SQL (standard) & RDBMS & & \\
+%		DB Ghost Change Manager & SQL/UI & RDBMS & & Paid\\
+%		Sqitch & ORM/SQL & RDBMS & Perl & MIT \\
+%		Idera DB Change Manager & SQL/UI & RDBMS & & Paid\\
+%		Monjam & ORM & MongoDB & Java & Apache 2.0\\
+%		Mongock & ORM/CLI & NoSQL & Java & Freemium\\
+%	\bottomrule
+	\end{tabularx}
+%	\caption{Available migration tools - Based on \cite{GoogleCloudTools, DBMSTools}}
+%	\label{tab:migration_tools}
+\end{table}
+
+\pagebreak
+\begin{table}[H]
+	\centering
+	\ra{1.3}
+	\begin{tabularx}{14cm}{p{3cm} p{3cm} p{2cm} l l p{2cm} }
+%		\toprule
+%		Name & Configuration & Supported DB  & Language & License\\ 
+%		\midrule
+%		Flyway & SQL (standard) & RDBMS & Java & Apache 2.0, Freemium \\
+%		Liquibase & Changelog & RDBMS, NoSql & Java & Apache 2.0, Freemium \\
+%		migrate & Changelog & RDBMS, NoSql &  Go & MIT\\
+%		Active Record Migrations & Ruby DSL & RDBMS & Ruby on Rails & MIT\\
+%		alembic & ORM & RDBMS & Python &  MIT \\
+%		dbup & SQL (standard) & RDMBS& .NET & MIT\\
+%		VS SQL Server Data Tools & SQL & RDBMS, \gls{AS}, \gls{IS}, \gls{RS} & C\#, Visual Basic & MIT \\
+%		Entity Framework Migrations & ORM & RDMBS & .NET & MIT \\
+%		Laravel Migrations & ORM & RDMBS & PHP & MIT \\
+%		dbForge Source Control & SQL/UI & SQL Server & Paid\\
+%		Yoyo & SQL (inline Python) & RDBMS & Python & Apache 2.0\\
+%		Phinx & ORM/SQL & RDBMS &  PHP & MIT\\
+%		Source Control for Oracle & SQL & RDBMS & Java & Paid\\
+%		DBmaestro & SQL/UI & RDBMS & & Paid\\
+%		Django & ORM & RDBMS& Python& BSD-3-Clause\\
+%		DBdeploy & SQL & RDBMS & PHP/.NET/Java & LGPL-3.0\\
+%		FluentMigrator & ORM &RDBMS& .Net, C\# & Apache 2.0\\
+				DBGeni & SQL (standard) & RDBMS & & \\
+				DB Ghost & SQL/UI & RDBMS & & Paid\\
+				Sqitch & ORM/SQL & RDBMS & Perl & MIT \\
+				Idera DB Change Manager & SQL/UI & RDBMS & & Paid\\
+				Monjam & ORM & MongoDB & Java & Apache 2.0\\
+				Mongock & ORM/CLI & NoSQL & Java & Freemium\\
+		\bottomrule
 	\end{tabularx}
 	\caption{Available migration tools - Based on \cite{GoogleCloudTools, DBMSTools}}
 	\label{tab:migration_tools}
