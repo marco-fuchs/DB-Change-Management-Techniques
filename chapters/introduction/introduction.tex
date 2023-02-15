@@ -99,7 +99,6 @@ In many cases, three instances of the database are needed in parallel. One datab
 Migration tools like Flyway or Liquibase can be used in these three environments. They allow local integration and use and integration into the CI pipeline in which the test database is used. Change management tools can also be integrated into the production environment, for example, in the cloud. The user can test the migrations directly locally. When it comes to deployment, a test can be performed automatically, for example on the test database. If this test is successful, the changes are only applied to the production database.
 
 \marginpar{Configuration categories}%
-
 There are several ways to evaluate the changes in the database. In different environments the following formats can occur:
 \begin{itemize}
 	\item Source code supplemented with a comment ("DocString") if necessary.
