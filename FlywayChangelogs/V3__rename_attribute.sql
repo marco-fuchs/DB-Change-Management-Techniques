@@ -1,0 +1,1 @@
+ALTER TABLE customer RENAME COLUMN email TO private_email;
