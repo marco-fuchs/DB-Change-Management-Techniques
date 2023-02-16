@@ -99,7 +99,6 @@ In many cases, three instances of the database are needed in parallel. One datab
 Migration tools like Flyway or Liquibase can be used in these three environments. They allow local integration and use and integration into the CI pipeline in which the test database is used. Change management tools can also be integrated into the production environment, for example, in the cloud. The user can test the migrations directly locally. When it comes to deployment, a test can be performed automatically, for example on the test database. If this test is successful, the changes are only applied to the production database.
 
 \marginpar{Configuration categories}%
-
 There are several ways to evaluate the changes in the database. In different environments the following formats can occur:
 \begin{itemize}
 	\item Source code supplemented with a comment ("DocString") if necessary.
@@ -167,8 +166,8 @@ The following table gives a non-holistic excerpt of open-source database change 
 		\toprule
 		Name & Configuration & Supported DB  & Language & License\\ 
 		\midrule
-		Flyway & SQL (standard) & RDBMS & Java & Freemium \\
-		Liquibase & Changelog & RDBMS, NoSql & Java & Freemium \\
+		Flyway & SQL (standard), ORM & RDBMS & Java & Apache 2.0 \\
+		Liquibase & Changelog & RDBMS, NoSql & Java & Apache 2.0 \\
 		migrate & Changelog & RDBMS, NoSql &  Go & MIT\\
 		Active Record Migrations & Ruby DSL & RDBMS & Ruby on Rails & MIT\\
 		alembic & ORM & RDBMS & Python &  MIT \\
@@ -176,18 +175,18 @@ The following table gives a non-holistic excerpt of open-source database change 
 		VS SQL Server Data Tools & SQL & RDBMS, \gls{AS}, \gls{IS}, \gls{RS} & C\#, Visual Basic & MIT \\
 		Entity Framework Migrations & ORM & RDMBS & .NET & MIT \\
 		Laravel Migrations & ORM & RDMBS & PHP & MIT \\
-		dbForge Source Control & SQL/UI & SQL Server & Paid\\
-		Yoyo & SQL (inline Python) & RDBMS & Python & Apache 2.0\\
+		dbForge Source Control & SQL/UI & SQL Server & - & Paid\\
+		Yoyo & SQL (in Python) & RDBMS & Python & Apache 2.0\\
 		Phinx & ORM/SQL & RDBMS &  PHP & MIT\\
 		Source Control for Oracle & SQL & RDBMS & Java & Paid\\
-		DBmaestro & SQL/UI & RDBMS & & Paid\\
-		Django & ORM & RDBMS& Python& BSD-3-Clause\\
+		DBmaestro & SQL/UI & RDBMS & - & Paid\\
+		Django & ORM & RDBMS& Python & BSD-3-Clause\\
 		DBdeploy & SQL & RDBMS & PHP/.NET/Java & LGPL-3.0\\
 		FluentMigrator & ORM &RDBMS& .Net, C\# & Apache 2.0\\
-%		DBGeni & SQL (standard) & RDBMS & & \\
-%		DB Ghost Change Manager & SQL/UI & RDBMS & & Paid\\
+%		DBGeni & SQL (standard) & RDBMS & - & -\\
+%		DB Ghost & SQL/UI & RDBMS & - & Paid\\
 %		Sqitch & ORM/SQL & RDBMS & Perl & MIT \\
-%		Idera DB Change Manager & SQL/UI & RDBMS & & Paid\\
+%		Idera DB Change Manager & SQL/UI & RDBMS & - & Paid\\
 %		Monjam & ORM & MongoDB & Java & Apache 2.0\\
 %		Mongock & ORM/CLI & NoSQL & Java & Freemium\\
 %	\bottomrule
@@ -221,10 +220,10 @@ The following table gives a non-holistic excerpt of open-source database change 
 %		Django & ORM & RDBMS& Python& BSD-3-Clause\\
 %		DBdeploy & SQL & RDBMS & PHP/.NET/Java & LGPL-3.0\\
 %		FluentMigrator & ORM &RDBMS& .Net, C\# & Apache 2.0\\
-				DBGeni & SQL (standard) & RDBMS & & \\
-				DB Ghost & SQL/UI & RDBMS & & Paid\\
+				DBGeni & SQL (standard) & RDBMS & - & -\\
+				DB Ghost & SQL/UI & RDBMS & - & Paid\\
 				Sqitch & ORM/SQL & RDBMS & Perl & MIT \\
-				Idera DB Change Manager & SQL/UI & RDBMS & & Paid\\
+				Idera DB Change Manager & SQL/UI & RDBMS & - & Paid\\
 				Monjam & ORM & MongoDB & Java & Apache 2.0\\
 				Mongock & ORM/CLI & NoSQL & Java & Freemium\\
 		\bottomrule
