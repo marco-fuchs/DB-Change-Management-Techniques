@@ -66,7 +66,7 @@ Furthermore, migration can be used as the single source of truth for the actual 
 %\marginpar{Context}%
 %This seminar thesis focuses on database migrations in the context of schema migrations.  Other database migrations, such as moving a database to a different platform or a cloud, are not considered in the context of this work.
 
-\newpage
+
 \section{State of the Art}%
 \subsection{DevOps strategies}
 \marginpar{Change\\ management strategies\\ \cite{GoogleDevOps2022}, \cite{Piairo2018}}%
@@ -153,86 +153,65 @@ Specific best practices simplify dealing with database changes regardless of wha
 \end{itemize}
 
 
-\newpage
 \section{Available Tools}%
 The following table gives a non-holistic excerpt of open-source database change management tools. The table consists of the tools name, configuration, supported database, language and license. The configuration describes how changes are defined within the tool, while language describes the programming language in which the tool can be embedded.
-%The list of tools should include the available programming languages, price / availability
-%and the main advantage over their competitors.
+There are tools for different programming languages and in different qualities. These range from shell script-like repositories to enterprise solutions. In this work, however, only the two tools Flyway and Liquibase are examined and tested.
+
 
 \begin{table}[H]
 	\centering
 	\ra{1.3}
-	\begin{tabularx}{15cm}{p{3cm} p{3cm} p{2cm} l l p{2cm} }
+	\begin{tabularx}{15.5cm}{p{3cm} p{3cm} p{2cm} l l p{2cm} }
 		\toprule
 		Name & Configuration & Supported DB  & Language & License\\ 
 		\midrule
-		Flyway & SQL (standard), ORM & RDBMS & Java & Apache 2.0 \\
-		Liquibase & Changelog & RDBMS, NoSql & Java & Apache 2.0 \\
-		migrate & Changelog & RDBMS, NoSql &  Go & MIT\\
-		Active Record Migrations & Ruby DSL & RDBMS & Ruby on Rails & MIT\\
-		alembic & ORM & RDBMS & Python &  MIT \\
-		dbup & SQL (standard) & RDMBS& .NET & MIT\\
-		VS SQL Server Data Tools & SQL & RDBMS, \gls{AS}, \gls{IS}, \gls{RS} & C\#, Visual Basic & MIT \\
-		Entity Framework Migrations & ORM & RDMBS & .NET & MIT \\
-		Laravel Migrations & ORM & RDMBS & PHP & MIT \\
-		dbForge Source Control & SQL/UI & SQL Server & - & Paid\\
-		Yoyo & SQL (in Python) & RDBMS & Python & Apache 2.0\\
-		Phinx & ORM/SQL & RDBMS &  PHP & MIT\\
-		Source Control for Oracle & SQL & RDBMS & Java & Paid\\
-		DBmaestro & SQL/UI & RDBMS & - & Paid\\
+		\textbf{Liquibase} &Changelog & RDBMS, NoSql & Java & Apache 2.0 \\
+		Migrate & Changelog & RDBMS, NoSql &  Go & MIT\\
+		Active Record Migrations & ORM & RDBMS & Ruby on Rails & MIT\\
+		Alembic & ORM & RDBMS & Python/SQLAlchemy &  MIT \\
 		Django & ORM & RDBMS& Python & BSD-3-Clause\\
-		DBdeploy & SQL & RDBMS & PHP/.NET/Java & LGPL-3.0\\
+		Entity Framework Migrations & ORM & RDMBS & .NET & MIT \\
 		FluentMigrator & ORM &RDBMS& .Net, C\# & Apache 2.0\\
-%		DBGeni & SQL (standard) & RDBMS & - & -\\
-%		DB Ghost & SQL/UI & RDBMS & - & Paid\\
-%		Sqitch & ORM/SQL & RDBMS & Perl & MIT \\
-%		Idera DB Change Manager & SQL/UI & RDBMS & - & Paid\\
-%		Monjam & ORM & MongoDB & Java & Apache 2.0\\
-%		Mongock & ORM/CLI & NoSQL & Java & Freemium\\
-%	\bottomrule
-	\end{tabularx}
-%	\caption{Available migration tools - Based on \cite{GoogleCloudTools, DBMSTools}}
-%	\label{tab:migration_tools}
-\end{table}
-
-\pagebreak
-\begin{table}[H]
-	\centering
-	\ra{1.3}
-	\begin{tabularx}{14cm}{p{3cm} p{3cm} p{2cm} l l p{2cm} }
-%		\toprule
-%		Name & Configuration & Supported DB  & Language & License\\ 
-%		\midrule
-%		Flyway & SQL (standard) & RDBMS & Java & Apache 2.0, Freemium \\
-%		Liquibase & Changelog & RDBMS, NoSql & Java & Apache 2.0, Freemium \\
-%		migrate & Changelog & RDBMS, NoSql &  Go & MIT\\
-%		Active Record Migrations & Ruby DSL & RDBMS & Ruby on Rails & MIT\\
-%		alembic & ORM & RDBMS & Python &  MIT \\
-%		dbup & SQL (standard) & RDMBS& .NET & MIT\\
-%		VS SQL Server Data Tools & SQL & RDBMS, \gls{AS}, \gls{IS}, \gls{RS} & C\#, Visual Basic & MIT \\
-%		Entity Framework Migrations & ORM & RDMBS & .NET & MIT \\
-%		Laravel Migrations & ORM & RDMBS & PHP & MIT \\
-%		dbForge Source Control & SQL/UI & SQL Server & Paid\\
-%		Yoyo & SQL (inline Python) & RDBMS & Python & Apache 2.0\\
-%		Phinx & ORM/SQL & RDBMS &  PHP & MIT\\
-%		Source Control for Oracle & SQL & RDBMS & Java & Paid\\
-%		DBmaestro & SQL/UI & RDBMS & & Paid\\
-%		Django & ORM & RDBMS& Python& BSD-3-Clause\\
-%		DBdeploy & SQL & RDBMS & PHP/.NET/Java & LGPL-3.0\\
-%		FluentMigrator & ORM &RDBMS& .Net, C\# & Apache 2.0\\
-				DBGeni & SQL (standard) & RDBMS & - & -\\
-				DB Ghost & SQL/UI & RDBMS & - & Paid\\
-				Sqitch & ORM/SQL & RDBMS & Perl & MIT \\
-				Idera DB Change Manager & SQL/UI & RDBMS & - & Paid\\
-				Monjam & ORM & MongoDB & Java & Apache 2.0\\
-				Mongock & ORM/CLI & NoSQL & Java & Freemium\\
+		Laravel Migrations & ORM & RDMBS & PHP & MIT \\
+		Monjam & ORM &MongoDB&Java&Apache 2.0\\
+		Mongock&ORM/CLI & NoSQL & Java & Freemium\\
+		DBdeploy &SQL & RDBMS & PHP/.NET/Java & LGPL-3.0\\
+		DBGeni &SQL & RDBMS & - & -\\
+		DBup &SQL & RDMBS& .NET & MIT\\
+		Source Control for Oracle &SQL & RDBMS & Java & Paid\\
+		VS SQL Server Data Tools &SQL & RDBMS, \gls{AS}, \gls{IS}, \gls{RS} & C\#, Visual Basic & MIT \\
+		Yoyo & SQL (in Python) & RDBMS & Python & Apache 2.0\\
+		\textbf{Flyway} & SQL (Script or in Java) & RDBMS & Java & Apache 2.0 \\
+		Sqitch &SQL/ORM & RDBMS & Perl & MIT \\
+		Phinx &SQL/ORM & RDBMS &  PHP & MIT\\
+		DB Ghost &SQL/UI & RDBMS & - & Paid\\
+		dbForge Source Control &SQL/UI & SQL Server & - & Paid\\
+		DBmaestro &SQL/UI & RDBMS & - & Paid\\
+		Idera DB Change Manager &SQL/UI & RDBMS & - & Paid\\
 		\bottomrule
 	\end{tabularx}
-	\caption{Available migration tools - Based on \cite{GoogleCloudTools, DBMSTools}}
+	\caption{Available Migration Tools - Based on \cite{GoogleCloudTools, DBMSTools}}
 	\label{tab:migration_tools}
 \end{table}
 
-There are tools for different programming languages and in different qualities. These range from shell script-like repositories to enterprise solutions. In this work, however, only the two tools Flyway and Liquibase are examined and tested.
+%\pagebreak
+%\begin{table}[H]
+%	\centering
+%	\ra{1.3}
+%	\begin{tabularx}{14cm}{p{3cm} p{3cm} p{2cm} l l p{2cm} }
+%		\textbf{Flyway} & SQL (Script or in Java) & RDBMS & Java & Apache 2.0 \\
+%		Sqitch &SQL/ORM & RDBMS & Perl & MIT \\
+%		Phinx &SQL/ORM & RDBMS &  PHP & MIT\\
+%		DB Ghost &SQL/UI & RDBMS & - & Paid\\
+%		dbForge Source Control &SQL/UI & SQL Server & - & Paid\\
+%		DBmaestro &SQL/UI & RDBMS & - & Paid\\
+%		Idera DB Change Manager &SQL/UI & RDBMS & - & Paid\\
+%		\bottomrule
+%	\end{tabularx}
+%	\caption{Available migration tools - Based on \cite{GoogleCloudTools, DBMSTools}}
+%	\label{tab:migration_tools}
+%\end{table}
+
 
 
 
